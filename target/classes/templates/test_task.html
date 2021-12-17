@@ -1,0 +1,526 @@
+<!doctype html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" th:href="@{/css/info-mgt.css}" />
+  <link th:href="@{/ruoyi/css/bootstrap.min.css}" rel="stylesheet"/>
+  <link th:href="@{/css/bootstrap-treeview.css}" rel=" stylesheet">
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <script type="text/javascript" src="/js/ztree/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript" src="/js/jqueryNew.js"></script>
+  <script type="text/javascript" src="/js/ztree/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.js"></script>
+  <style>
+    .layui-layer-title{background:url(images/righttitlebig.png) repeat-x;font-weight:bold;color:#46647e; border:1px solid #c1d3de;height: 33px;line-height: 33px;}
+    .tabe_bot label{width: 70px;text-align: right;font-size: 10px;font-weight: 900;color: #46647e}
+    .l_left{float: left}
+    .tabe_bot input,.tabe_bot  select{width: 180px;height: 30px;border-radius: 6px;margin:0 20px 0 0;border: none;border: 1px #ccc solid;text-indent: 1em}
+    .tabe_btn{width: 60px;height: 30px;background-color: #68b86c;border: none;border-radius: 6px;color: #fff}
+    div.zTreeDemoBackground {width:250px;height:362px;text-align:left;}
+    div.content_wrap {width: 600px;height:auto;}
+    div.content_wrap div.left{float: left;width: 250px;height:auto}
+    ul.ztree {margin-top: 10px;border: 1px solid #617775;background: #f0f6e4;width:220px;height:360px;overflow-y:scroll;overflow-x:auto;}
+    /* ztree */
+    div.ztree-border {
+      margin-top: 10px;
+      border: 1px solid #e5e6e7;
+      background: #FFFFFF none;
+      border-radius:4px;
+    }
+    .white-bg{background-color:#fff}
+  </style>
+  <title>测试任务信息编辑</title>
+</head>
+
+<body>
+
+<div class="title"><h2>测试任务信息编辑</h2></div>
+
+  <tr class="table-responsive">
+    <table class="table table-striped table-sm" id="display_result">
+<!--    <table class="table table-striped table-sm" id="display_result">-->
+    </table>
+  </tr>
+
+<!--   addmodal-->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">新增</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-test-add" class="form-horizontal">
+          <!--    隐藏域，将材料id值传入后端-->
+          <input type="hidden" id="uid" />
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="col-sm-4 control-label ">产品名称:</label>
+              <div class="col-sm-8">
+                <input id="product_name" type="text" class="form-control" maxlength="30" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="col-sm-4 control-label ">软件名称:</label>
+              <div class="col-sm-8">
+                <input id="software_name" type="text" class="form-control" maxlength="30"  />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="col-sm-4 control-label ">软件版本:</label>
+              <div class="col-sm-8">
+                <input id="version" type="text" class="form-control" maxlength="30" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="col-sm-4 control-label ">软件架构:</label>
+              <div class="col-sm-8">
+                <input id="architecture" type="text" class="form-control" maxlength="30"  />
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">数据库:</label>
+                <div class="col-sm-8">
+                  <input id="database" type="text" class="form-control" maxlength="30" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">中间件:</label>
+                <div class="col-sm-8">
+                  <input id="middleware" type="text" class="form-control" maxlength="30"  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">其它:</label>
+                <div class="col-sm-8">
+                  <input id="other" type="text" class="form-control" maxlength="30" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">开发者:</label>
+                <div class="col-sm-8">
+                  <input id="developer" type="text" class="form-control" maxlength="30"  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label class="col-xs-2 control-label ">备注：</label>
+                <div class="col-xs-10">
+                  <textarea id="comment" maxlength="500" class="form-control" rows="6" ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+      </div>
+      </div>
+  </div>
+</div>
+</div>
+
+
+<!--   editmodal-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">编辑</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-test-edit" class="form-horizontal">
+          <!--    隐藏域，将材料id值传入后端-->
+          <input type="hidden" id="uid1" />
+          <input type="hidden" id="software_uid1" />
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">软件名称:</label>
+                <div class="col-sm-8">
+                  <input id="software_name1" type="text" class="form-control" maxlength="30"  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">软件版本:</label>
+                <div class="col-sm-8">
+                  <input id="version1" type="text" class="form-control" maxlength="30" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">软件架构:</label>
+                <div class="col-sm-8">
+                  <input id="architecture1" type="text" class="form-control" maxlength="30"  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">数据库:</label>
+                <div class="col-sm-8">
+                  <input id="database1" type="text" class="form-control" maxlength="30" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">中间件:</label>
+                <div class="col-sm-8">
+                  <input id="middleware1" type="text" class="form-control" maxlength="30"  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">其它:</label>
+                <div class="col-sm-8">
+                  <input id="other1" type="text" class="form-control" maxlength="30" />
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="col-sm-4 control-label ">开发者:</label>
+                <div class="col-sm-8">
+                  <input id="developer1" type="text" class="form-control" maxlength="30"  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label class="col-xs-2 control-label ">备注：</label>
+                <div class="col-xs-10">
+                  <textarea id="comment1" maxlength="500" class="form-control" rows="6" ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" onclick="saveEdit()">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  window.onload=initTable;
+  function initTable(){
+    $("#display_result").bootstrapTable({
+      url: '/ListSuccess',
+      method: 'get',
+      striped: true, //是否显示行间隔色
+      detailView: true,//父子表
+      pagination: true,//显示分页
+      sidePagination: "client",
+      pageNumber:1,
+      pageSize: 20,
+      uniqueId: "uid",
+      pageList: [10, 25],
+      contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+      columns: [{
+        field: 'uid',
+        title: '序号'
+      }, {
+        field: 'task_id',
+        title: '送检材料编号'
+      }, {
+        field: 'network',
+        title: '机构系统类别'
+      }, {
+        field: 'product_name',
+        title: '产品名称'
+      }, {
+        field: 'version',
+        title: '版本号'
+      }, {
+        field: 'boss_name',
+        title: '负责人'
+      }, {
+        field: 'creditCode',
+        title: '信用代码'
+      }, {
+          field: 'operate',
+          title: '操作',
+          align: 'center',
+          valign: 'middle',
+          width: 200,
+          events: {
+            'click #add': function (e, value, row, index) {
+              $('#product_name').val(row.product_name);
+              $('#uid').val(row.uid);
+            },
+          },
+          formatter: function (value, row, index) {
+            var result = "";
+            result += '<button id="add" class="btn btn-info" data-toggle="modal" data-target="#addModal">添加软件信息</button>';
+            return result;
+          }
+        }],
+      //注册加载子表的事件。注意下这里的三个参数！
+      onExpandRow: function (index, row, $detail) {
+        initSubTable(index, row, $detail);
+      }
+    });
+    //初始化子表格(无限循环)
+    initSubTable = function (index, row, $detail) {
+      var parentid = row.uid;
+      var cur_table = $detail.html('<table></table>').find('table');
+      $(cur_table).bootstrapTable({
+        url: '/SoftwareList',
+        method: 'get',
+        cache: false,
+        sortable: false,
+        queryParams: {id: parentid},
+        ajaxOptions: {id: parentid},
+        uniqueId: "software_uid",
+        striped: true, //是否显示行间隔色
+        sidePagination: "client",
+        // detailView: true,
+        contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+        columns: [{
+          field: 'software_uid',
+          title: '软件ID'
+        }, {
+          field: 'software_name',
+          title: '软件名'
+        }, {
+          field: 'version',
+          title: '软件版本号'
+        }, {
+          field: 'architecture',
+          title: '软件架构'
+        }, {
+          field: 'database',
+          title: '数据库'
+        }, {
+          field: 'middleware',
+          title: '中间件'
+        }, {
+          field: 'other',
+          title: '其它'
+        }, {
+          field: 'developer',
+          title: '开发者'
+        }, {
+          field: 'comment',
+          title: '备注'
+        }, {
+          field: 'operate',
+          title: '操作',
+          align: 'center',
+          valign: 'middle',
+          width: 200,
+          events: {
+            'click #edit': function (e, value, row, index) {
+              $('#uid1').val(row.uid);
+              $('#software_uid1').val(row.software_uid);
+              $('#software_name1').val(row.software_name);
+              $('#version1').val(row.version);
+              $('#architecture1').val(row.architecture);
+              $('#database1').val(row.database);
+              $('#middleware1').val(row.middleware);
+              $('#other1').val(row.other);
+              $('#developer1').val(row.developer);
+              $('#comment1').val(row.comment);
+            },
+          'click #delete': function (e, value, row, index) {
+            deleteInfo(row.software_uid);
+          },
+            'click #set': function (e, value, row, index) {
+              setPoints(row.software_uid);
+            },
+          },
+          formatter: function (value, row, index) {
+            var result = "";
+            result += '<button id="edit" class="btn btn-warning" data-toggle="modal" data-target="#editModal">编辑</button>';
+            result += '<button id="delete" class="btn btn-danger" style="margin-left:5px;">删除</button>';
+            result += '<button id="set" class="btn btn-success" style="margin-left:5px;">检查要点设置</button>';
+            return result;
+          }
+        }],
+        //无线循环取子表，直到子表里面没有记录
+        onExpandRow: function (index, row, $Subdetail) {
+          initSubTable(index, row, $Subdetail);
+        }
+      });
+    };
+  }
+</script>
+<script>
+  function save(){
+    //获取值
+    var uid = $("#uid").val();
+    var software_name = $("#software_name").val();
+    var version = $("#version").val();
+    var architecture = $("#architecture").val();
+    var database = $("#database").val();
+    var middleware = $("#middleware").val();
+    var other = $("#other").val();
+    var developer = $("#developer").val();
+    var comment = $("#comment").val();
+
+    $.ajax({
+      url: "/test_add",
+      type: "post",
+      dataType: "json",
+      data: {
+        "uid":uid,
+        "software_name":software_name,
+        "version":version,
+        "architecture":architecture,
+        "middleware":middleware,
+        "database":database,
+        "other":other,
+        "developer":developer,
+        "comment":comment,
+      },
+      success:function (res){
+        if(res.code == 1){
+          //清空文本框
+          $("#software_name").val("");
+          $("#version").val("");
+          $("#architecture").val("");
+          $("#middleware").val("");
+          $("#database").val("");
+          $("#other").val("");
+          $("#developer").val("");
+          $("#comment").val("");
+          //刷新页面
+          window.location.href = "test_task.html";
+        }
+      }
+    })
+  }
+
+  function saveEdit(){
+    //获取值
+    var uid = $("#uid1").val();
+    var software_uid = $("#software_uid1").val();
+    var software_name = $("#software_name1").val();
+    var version = $("#version1").val();
+    var architecture = $("#architecture1").val();
+    var database = $("#database1").val();
+    var middleware = $("#middleware1").val();
+    var other = $("#other1").val();
+    var developer = $("#developer1").val();
+    var comment = $("#comment1").val();
+
+    $.ajax({
+      url: "/software_edit",
+      type: "post",
+      dataType: "json",
+      data: {
+        "uid":uid,
+        "software_uid":software_uid,
+        "software_name":software_name,
+        "version":version,
+        "architecture":architecture,
+        "middleware":middleware,
+        "database":database,
+        "other":other,
+        "developer":developer,
+        "comment":comment,
+      },
+      success:function (res){
+        if(res.code == 1){
+          //刷新页面
+          window.location.href = "test_task.html";
+        }
+      }
+    })
+  }
+
+  function saveSet(){
+    //获取值
+    var software_uid = $("#software_uid2").val();
+    var software_name = $("#software_name2").val();
+    var project_name = $("#project_name").val();
+    var technical_requirements = $("#technical_requirements").val();
+    var point_name = $("#point_name").val();
+    $.ajax({
+      url: "/project_set",
+      type: "post",
+      dataType: "json",
+      data: {
+        "software_uid":software_uid,
+        "software_name":software_name,
+        "project_name":project_name,
+        "technical_requirements":technical_requirements,
+        "point_name":point_name,
+      },
+      success:function (res){
+        if(res.code == 1){
+          //刷新页面
+          window.location.href = "test_task.html";
+        }
+      }
+    })
+  }
+
+  // 删除信息
+  function deleteInfo(software_uid) {
+    window.location.href = "/delSoftware/"+software_uid;
+  }
+
+  function setPoints(software_uid){
+    window.location.href = "/setPoints/"+software_uid;
+  }
+</script>
+
+
+</body>
+
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-table.js}"></script>
+<script th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/js/zh.js}" ></script>
+
+
+<script type="text/javascript" th:src="@{/js/bootstrap-select/bootstrap-select.min.js}" ></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-select/bootstrap-select.js}" ></script>
+
+
+</html>

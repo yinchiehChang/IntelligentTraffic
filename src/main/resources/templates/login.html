@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>公安交通管理软件质量及安全合规性检验管理系统</title>
+	<!-- Bootstrap core CSS -->
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<!-- Custom styles for this template -->
+	<link th:href="@{/css/signin.css}" rel="stylesheet">
+	<link th:href="@{/css/login.css}" rel="stylesheet">
+	<style>
+		.btn-display{
+			display: block;
+			text-decoration: none;
+			margin-left: 50px;
+			width: 200px;
+		}
+	</style>
+
+</head>
+<body>
+<div class="login">
+	<div class="login_title">
+		<p><img src="../images/jinghui.png">公安交通管理软件质量及安全合规性检验管理系统</p>
+	</div>
+	<div class="login_main">
+		<div class="main_left"></div>
+		<div class="main_right">
+			<div class="right_title">用户登录</div>
+			<form  name="loginForm" id="loginForm" th:action="@{/users/login}" >
+				<p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+				<div class="username">
+					<img src="../images/username.png" alt="">
+					<input type="text" placeholder="请输入用户名" name="username"   tabindex="1">
+				</div>
+				<div class="password">
+					<img src="../images/password.png" alt="">
+					<input type="password" placeholder="请输入密码" name="password" tabindex="2">
+				</div>
+
+				<button class="btn btn-mini btn-primary btn-display" type="submit" >登录</button>
+			</form>
+		</div>
+	</div>
+	<div class="login_footer">
+		<p class="name">版本号：v1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+	</div>
+</div>
+</body>
+
+</html>

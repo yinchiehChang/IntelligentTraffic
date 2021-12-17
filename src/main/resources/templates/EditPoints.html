@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<HTML lang="en"  xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+    <TITLE> ZTREE DEMO </TITLE>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/css/demo.css" type="text/css">
+    <link rel="stylesheet" href="/css/ztree/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="/js/ztree/jquery-1.4.4.min.js"></script>
+<!--    <script type="text/javascript" src="/js/jquery.ztree.core-3.5.js"></script>-->
+    <script type="text/javascript" src="/js/ztree/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.js"></script>
+<!--    <script type="text/javascript" src="/js/jquery.ztree.excheck-3.5.js"></script>-->
+    <th:block th:include="include :: header('新增任务')" />
+
+    <style>
+        .r{position:fixed; bottom:0;}
+    </style>
+
+</HEAD>
+<BODY>
+
+<div class="main-content">
+    <form id = "form-points-add" class="form-horizontal">
+        <input type="hidden" id="project_id" th:value="${project.getProject_id()}"/>
+        <input type="hidden" id="uid" th:value="${project.getSoftware_uid()}"/>
+<!--        <input type="hidden" id="point_ids" th:value="${project.getPoint_ids()}"/>-->
+        <h4 class="form-header h4">设置软件测试点</h4>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label ">软件名称:</label>
+                    <div class="col-sm-5">
+                        <input id="software_name" class="form-control" type="text" maxlength="30" th:value="${project.getSoftware_name()}" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">项目名称:</label>
+                    <div class="col-sm-5">
+                        <input id="project_name"  class="form-control" type="text" th:value="${project.getProject_name()}"
+                               maxlength="30" >
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">技术要求:</label>
+                    <div class="col-sm-5">
+                        <input id="technical_requirements"  class="form-control" type="text" th:value="${project.getTechnical_requirements()}"
+                               maxlength="30" >
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        style="width:240px;"-->
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required" >设置测试点:</label>
+                            <div class="col-sm-8">
+                                 <input id="citySel" type="text" readonly th:value="${project.getPoint_names()}"  class="form-control" onclick="showMenu();" maxlength="30" />
+                            </div>
+                            <div id="menuContent" class="menuContent" style="display:none; position: fixed;">
+                                <ul id="treeDemo" class="ztree" style="margin-top:0; width:580px; height: 400px;"></ul>
+                            </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">检查点id:</label>
+                    <div class="col-sm-5">
+                        <input id="point_ids"  class="form-control"  readonly type="text" th:value="${project.getPoint_ids()}"
+                               maxlength="30" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10 r">
+        <button type="button" class="btn btn-sm btn-primary" onclick="saveSet()"><i class="fa fa-check"></i>提交</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/projects'"><i class="fa fa-reply-all"></i>关 闭 </button>
+    </div>
+</div>
+<SCRIPT type="text/javascript">
+    var setting = {
+        check: {
+            enable: true
+        },
+        view: {
+            dblClickExpand: false
+        },
+        callback: {
+            beforeClick: beforeClick,
+            onCheck: onCheck
+        }
+    };
+
+    var zNodes;
+
+    $.ajax({
+        async:false,
+        cache:false,
+        type:'get',
+        dataType:'json',
+        url:'/queryAllBase',
+        success:function (data) {
+            console.log(data);
+            for(var i=0;i<data.length;i++){
+                data[i].name = data[i].base_name;
+                for (var j=0;j<data[i].securities.length;j++){
+                    var articleChildren = data[i].securities[j].articles;
+                    data[i].securities[j].name = data[i].securities[j].security_level;
+                    for(var z=0;z<data[i].securities[j].articles.length;z++){
+                        var pointChildren = data[i].securities[j].articles[z].points;
+                        data[i].securities[j].articles[z].name = data[i].securities[j].articles[z].article_name;
+                        for (var n=0;n<data[i].securities[j].articles[z].points.length;n++){
+                            data[i].securities[j].articles[z].points[n].name=data[i].securities[j].articles[z].points[n].point_name;
+                        }
+                        delete(data[i].securities[j].articles[z].points);
+                        data[i].securities[j].articles[z].children=pointChildren;
+                    }
+                    delete(data[i].securities[j].articles);
+                    data[i].securities[j].children=articleChildren;
+                }
+                var securityChildren = data[i].securities;
+                delete(data[i].securities);
+                data[i].children = securityChildren;
+            }
+            console.log(data);
+            zNodes=data;
+        }
+    })
+
+
+    function beforeClick(treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.checkNode(treeNode, !treeNode.checked, null, true);
+        return false;
+    }
+
+    function onCheck(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            nodes = zTree.getCheckedNodes(true),
+            v = "",
+            point_ids = "";
+        for (var i=1, l=nodes.length; i<l; i++) {
+            if(nodes[i].point_name!=undefined){
+                v += nodes[i].point_name+"、";
+                point_ids += nodes[i].point_id+"、";
+            }
+        }
+        //将最后一个添加的测试点后的、去掉
+        if (v.length > 0 ) v = v.substring(0, v.length-1);
+        if (point_ids.length > 0 ) point_ids = point_ids.substring(0, point_ids.length-1);
+        var cityObj = $("#citySel");
+        cityObj.attr("value", v);
+        $("#point_ids").val(point_ids);
+    }
+
+    function showMenu() {
+        var cityObj = $("#citySel");
+        var cityOffset = $("#citySel").offset();
+        $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+        $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+        $("#menuContent").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+            hideMenu();
+        }
+    }
+
+    $(function() {
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+</SCRIPT>
+<SCRIPT>
+    function saveSet(){
+        //获取值
+        var project_id = $("#project_id").val();
+        var software_uid = $("#uid").val();
+        var software_name = $("#software_name").val();
+        var project_name = $("#project_name").val();
+        var technical_requirements = $("#technical_requirements").val();
+        var point_names = $("#citySel").val();
+        var point_ids = $("#point_ids").val();
+        $.ajax({
+            url: "/project_edit",
+            type: "post",
+            dataType: "json",
+            data: {
+                "project_id":project_id,
+                "software_uid":software_uid,
+                "software_name":software_name,
+                "project_name":project_name,
+                "technical_requirements":technical_requirements,
+                "point_names":point_names,
+                "point_ids":point_ids,
+            },
+            success:function (res){
+                if(res.code == 1){
+                    $("#project_id").val("");
+                    $("#uid").val("");
+                    $("#software_name").val("");
+                    $("#project_name").val("");
+                    $("#technical_requirements").val("");
+                    $("#citySel").val("");
+                    $("#point_ids").val("");
+                    //刷新页面
+                    window.location.href = "/projects";
+                }
+            }
+        })
+    }
+</SCRIPT>
+</BODY>
+</HTML>

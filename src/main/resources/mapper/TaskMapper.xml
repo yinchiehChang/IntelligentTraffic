@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.TaskMapper">
+
+    <resultMap type="Task" id="TaskResult">
+        <id property="uid"   column="uid"   />
+        <result property="task_id"   column="task_id"   />
+        <result property="network"  column="network"   />
+        <result property="product_name"   column="product_name"   />
+        <result property="version"   column="version"   />
+        <result property="boss_name"   column="boss_name"   />
+        <result property="creditCode"   column="creditCode"   />
+    </resultMap>
+
+    <select id="selectTaskList" resultMap="TaskResult">
+        select * from "Task" order by "uid"
+    </select>
+
+    <insert id="insertTask" parameterType="Task">
+        <selectKey keyProperty="uid" resultType="int" order="BEFORE">
+            select nvl(max("uid"),0)+1 from "Task"
+        </selectKey>
+        insert into "Task"("uid","task_id","client","worker","contact_uid","contact_name","pid","boss_name","boss_contact","telephone","fax","post_code","platform_uid","website","email","address","type","contact_comment","product_uid","platform_name","network","status", "info","platform_comment","product_name",
+        "version","product_comment","enterprise_uid","name","cancel_date","reg_status","reg_capital","city","staff_num_range","bond_num","industry","bond_name","revoke_date","legal_type","update_times","legal_person_name","comment","bondType","creditCode","interface_sensitive")
+        values(#{uid},#{task_id},#{client},#{worker},#{contact_uid},#{contact_name},#{pid},#{boss_name},#{boss_contact},#{telephone},#{fax},#{post_code},#{platform_uid},#{website},#{email},#{address},#{type},#{contact_comment},#{product_uid},#{platform_name},#{network},#{status},#{info},#{platform_comment},#{product_name},
+          #{version},#{product_comment},#{enterprise_uid},#{name},#{cancel_date},#{reg_status},#{reg_capital},#{city},#{staff_num_range},#{bond_num},#{industry},#{bond_name},#{revoke_date},#{legal_type},#{update_times},#{legal_person_name},#{comment},#{bondType},#{creditCode},#{interface_sensitive})
+    </insert>
+
+    <select id="findTaskById" resultType="Task">
+        select * from "Task" where "uid" = #{uid}
+    </select>
+
+    <select id="findByTaskId" resultType="int">
+        select "Task"."uid" from "Task" where "task_id" = #{task_id}
+    </select>
+
+    <select id="findByRequired" parameterType="Task" resultType="Task">
+    select * from "Task" where 1=1
+    <if test="network !=null and network !=''">
+        and "network"= #{network}
+    </if>
+    <if test="product_name !=null and product_name !=''">
+        and "product_name"= #{product_name}
+    </if>
+   <if test="version !=null and version !=''">
+            and "version"= #{version}
+   </if>
+   <if test="name !=null and name !=''">
+            and "name"= #{name}
+   </if>
+    </select>
+
+    <select id="findTask" parameterType="Task" resultType="Task">
+        select * from "Task" where 1=1
+        <if test="task_id !=null and task_id !=''">
+            and "task_id"= #{task_id}
+        </if>
+        <if test="product_name !=null and product_name !=''">
+            and "product_name"= #{product_name}
+        </if>
+        <if test="contact_name !=null and contact_name !=''">
+            and "contact_name"= #{contact_name}
+        </if>
+    </select>
+
+    <delete id="delTask" parameterType="int">
+        delete
+        from "Task"
+        where "Task"."uid" = #{id}
+    </delete>
+
+    <insert id="insertTaskIssued" parameterType="Task_issued">
+        insert into "Task_issued"("check_id","security_level","unit_name","contact_name","boss_contact","platform_name","database","architecture","version","software_name","name","project_id","check_status")
+        values(#{check_id},#{security_level},#{unit_name},#{contact_name},#{boss_contact},#{platform_name},#{database},#{architecture},#{version},#{software_name},#{name},#{project_id},0)
+    </insert>
+
+</mapper>

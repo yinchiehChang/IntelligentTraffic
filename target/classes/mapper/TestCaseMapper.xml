@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.TestCaseMapper">
+
+    <resultMap type="TestCase" id="TestCaseResult">
+        <id property="testCase_id"   column="testCase_id"   />
+        <result property="case_id"   column="case_id"   />
+        <result property="case_name"   column="case_name"   />
+        <result property="case_needsTrace"  column="case_needsTrace"   />
+        <result property="case_Description"   column="case_Description"   />
+        <result property="case_init"   column="case_init"   />
+        <result property="case_endCondition"   column="case_endCondition"   />
+        <result property="case_status"   column="case_status"   />
+        <result property="uid"   column="uid"   />
+    </resultMap>
+
+    <resultMap type="Test_Procedure" id="Test_ProcedureResult">
+        <id property="uid"   column="uid"   />
+        <result property="steps"   column="steps"   />
+        <result property="exp_result"   column="exp_result"   />
+        <result property="evaluation"  column="evaluation"   />
+        <result property="act_result"   column="act_result"   />
+        <result property="exe_result"   column="exe_result"   />
+        <result property="testCase_id"   column="testCase_id"   />
+    </resultMap>
+
+    <insert id="insertTestCase" parameterType="TestCase">
+        <selectKey keyProperty="testCase_id" resultType="int" order="BEFORE">
+            select nvl(max("testCase_id"),0)+1 from "TestCase"
+        </selectKey>
+        insert into "TestCase"("testCase_id","case_id","case_name","case_needsTrace","case_Description","case_init","case_endCondition","case_status","uid","case_result")
+        values(#{testCase_id},#{case_id},#{case_name},#{case_needsTrace,jdbcType=VARCHAR},#{case_Description},#{case_init,jdbcType=VARCHAR},#{case_endCondition,jdbcType=VARCHAR},#{case_status},#{uid},0)
+    </insert>
+
+    <insert id="insertTestProcedure" parameterType="Test_Procedure">
+        <selectKey keyProperty="uid" resultType="int" order="BEFORE">
+            select nvl(max("uid"),0)+1 from "Test_Procedure"
+        </selectKey>
+        insert into "Test_Procedure"("uid","steps","exp_result","evaluation","act_result","exe_result","testCase_id")
+        values(#{uid},#{steps},#{exp_result},#{evaluation},#{act_result,jdbcType=VARCHAR},#{exe_result,jdbcType=VARCHAR},#{testCase_id})
+    </insert>
+
+    <select id="findTestCases" resultMap="TestCaseResult">
+        select * from "TestCase" where "uid"=#{uid} order by "testCase_id"
+    </select>
+
+    <select id="findByCaseId" resultType="TestCase">
+        select * from "TestCase" where "testCase_id"=#{testCase_id}
+    </select>
+
+    <delete id="delCases" parameterType="int">
+        delete
+        from "TestCase"
+        where "TestCase"."testCase_id" = #{testCase_id}
+    </delete>
+
+    <update id="editTestCase" parameterType="TestCase">
+        update "TestCase"
+        <set>
+            "case_name" = #{case_name},
+            "case_needsTrace" = #{case_needsTrace},
+            "case_Description" = #{case_Description},
+            "case_init" = #{case_init},
+            "case_endCondition" = #{case_endCondition},
+            "case_result" = #{case_result},
+        </set>
+        where "testCase_id" = #{testCase_id}
+    </update>
+
+    <update id="editTestProcedure" parameterType="Test_Procedure">
+        update "Test_Procedure"
+        <set>
+            "steps" = #{steps},
+            "exp_result" = #{exp_result},
+            "evaluation" = #{evaluation},
+        </set>
+        where "testCase_id" = #{testCase_id}
+    </update>
+
+    <delete id="delTestProcedure" parameterType="int">
+    delete
+    from "Test_Procedure"
+    where "Test_Procedure"."testCase_id" = #{testCase_id}
+    </delete>
+
+    <select id="findAllCases" resultMap="TestCaseResult">
+        select * from "TestCase"
+        where "uid" = #{uid}
+        Order by "testCase_id"
+    </select>
+
+    <select id="queryProcedure" resultMap="Test_ProcedureResult">
+        select * from "Test_Procedure" where "testCase_id"=#{testCase_id} order by "uid"
+    </select>
+
+    <update id="updateStatus" parameterType="int">
+        update "TestCase"
+        <set>
+            "case_status" = #{status}
+        </set>
+        where "testCase_id" = #{testCase_id}
+    </update>
+
+    <select id="queryQualityIds" resultType="Integer">
+        SELECT DISTINCT "TestCase"."uid"
+        FROM "TestCase"
+        Order By "uid"
+    </select>
+
+    <select id="countCases" resultType="int" parameterType="int">
+        SELECT COUNT(*)
+        FROM "TestCase"
+        WHERE "TestCase"."uid" = #{uid}
+    </select>
+
+    <select id="countPassCases" resultType="int" parameterType="int">
+        SELECT COUNT(*)
+        FROM "TestCase"
+        WHERE "TestCase"."uid" = #{uid} AND "TestCase"."case_result" = 4
+    </select>
+</mapper>

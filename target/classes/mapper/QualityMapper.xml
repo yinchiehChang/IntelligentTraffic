@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.QualityMapper">
+
+    <insert id="insertQuality" parameterType="Quality">
+        <selectKey keyProperty="uid" resultType="int" order="BEFORE">
+            select nvl(max("uid"),0)+1 from "Quality"
+        </selectKey>
+        insert into
+        "Quality"("uid","quality_id","software_name","software_version","software_category",
+        "production_unit","software_desc","contact_person","contact_number","specification_model",
+        "software_arch","db_info",
+        "status","isGuideLine")
+        values(#{uid,jdbcType=NUMERIC},
+        #{quality_id,jdbcType=NUMERIC},
+        #{software_name,jdbcType=VARCHAR},
+        #{software_version,jdbcType=VARCHAR},
+        #{software_category,jdbcType=VARCHAR},
+        #{production_unit,jdbcType=VARCHAR},
+        #{software_desc,jdbcType=VARCHAR},
+        #{contact_person,jdbcType=VARCHAR},
+        #{contact_number,jdbcType=VARCHAR},
+        #{specification_model,jdbcType=VARCHAR},
+        #{software_arch,jdbcType=VARCHAR},
+        #{db_info,jdbcType=VARCHAR},
+        1,
+        #{isGuideLine,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="queryQualityList" resultType="Quality">
+        select * from "Quality" Order by "uid"
+    </select>
+
+    <select id="findQualityById" resultType="Quality">
+        select * from "Quality" where "uid" = #{uid}
+    </select>
+
+    <select id="findQualityByQid" resultType="Quality">
+        select * from "Quality" where "quality_id" LIKE '%' || #{quality_id} || '%'
+    </select>
+
+    <select id="findQualityByName" resultType="Quality">
+      SELECT * from "Quality" where "software_name" LIKE '%' || #{software_name} || '%'
+   </select>
+
+    <select id="findQualityByUnit" resultType="Quality">
+      SELECT * from "Quality" where "production_unit" LIKE '%' || #{production_unit} || '%'
+   </select>
+
+    <select id="findQualityByAll" resultType="Quality">
+        select * from "Quality" where "quality_id" LIKE '%' || #{quality_id} || '%'
+        INTERSECT
+        SELECT * from "Quality" where "software_name" LIKE '%' || #{software_name} || '%'
+        INTERSECT
+        SELECT * from "Quality" where "production_unit" LIKE '%' || #{production_unit} || '%'
+   </select>
+
+    <!--根据status查询-->
+    <select id="findQualityByStatus" resultType="Quality">
+      SELECT * from "Quality" where "status" = #{status} Order by "uid"
+   </select>
+
+    <!--根据id删除-->
+    <delete id="deleteQualityById" parameterType="int">
+      delete from "Quality" where "uid" = #{uid}
+   </delete>
+
+
+    <update id="updateQuality" parameterType="Quality">
+      update "Quality" set "quality_id" = #{quality_id},
+      "software_name" = #{software_name},
+      "software_version" = #{software_version},
+      "software_category" = #{software_category},
+      "production_unit" = #{production_unit},
+      "software_desc" = #{software_desc},
+      "contact_person" = #{contact_person},
+      "contact_number" = #{contact_number},
+      "specification_model" = #{specification_model},
+      "software_arch" = #{software_arch},
+      "db_info" = #{db_info},
+      "isGuideLine" = #{isGuideLine},
+      "specification_url" = #{specification_url},
+      "manual_url" = #{manual_url},
+      "code_file_url" = #{code_file_url}
+      where "uid" = #{uid}
+   </update>
+
+    <!--"require_doc_url" = #{require_doc_url},
+    "design_doc_url" = #{design_doc_url},
+    "coding_url" = #{coding_url},
+    "test_doc_url" = #{test_doc_url},-->
+
+    <!--更新status-->
+    <update id="updatesStatus" parameterType="Quality">
+      update "Quality" set "status" = #{status}
+      where "uid" = #{uid}
+   </update>
+
+
+</mapper>

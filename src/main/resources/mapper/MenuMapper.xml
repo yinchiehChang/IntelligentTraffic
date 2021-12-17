@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.MenuMapper">
+
+    <resultMap type="Menu" id="MenuResult">
+        <id     property="menu_id"     column="menu_id"     />
+        <result property="pid"   column="pid"   />
+        <result property="menu_name"  column="menu_name"   />
+        <result property="url"   column="url"   />
+        <result property="icon"   column="icon"   />
+    </resultMap>
+
+    <select id="listMenuByRole" parameterType="int" resultMap="MenuResult">
+        select "Sys_Menu".*
+        FROM "Sys_Menu","Sys_Role_Menu"
+        WHERE "Sys_Role_Menu"."role_id"=#{role_id} AND "Sys_Role_Menu"."menu_id"="Sys_Menu"."menu_id"
+    </select>
+
+    <select id="findMenuList" resultMap="MenuResult">
+        select *
+        from  "Sys_Menu"
+    </select>
+
+    <insert id="insert_role_menu" parameterType="Sys_Role_Menu" >
+        insert into "Sys_Role_Menu"("menu_id","role_id")
+        values(#{menu_id},#{role_id})
+    </insert>
+</mapper>

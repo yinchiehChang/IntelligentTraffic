@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.EnterpriseMapper">
+
+    <insert id="insertEnterprise" parameterType="Enterprise" >
+        insert into "Enterprise"("enterprise_uid","name","cancel_date","reg_status","reg_capital","city","staff_num_range","bond_num","industry","bond_name","revoke_date","legal_type","update_times","legal_person_name","comment","bondType","creditCode")
+        values(#{enterprise_uid},#{name},#{cancel_date},#{reg_status},#{reg_capital},#{city},#{staff_num_range},#{bond_num},#{industry},#{bond_name},#{revoke_date},#{legal_type},#{update_times},#{legal_person_name},#{comment},#{bondType},#{creditCode})
+    </insert>
+
+</mapper>

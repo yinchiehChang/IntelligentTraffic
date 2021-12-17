@@ -1,0 +1,87 @@
+<!doctype html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/css/bootstrap-table.css}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" th:href="@{/css/base.css}" />
+  <link rel="stylesheet" th:href="@{/css/info-mgt.css}" />
+  <link rel="stylesheet" th:href="@{/css/layui.css}"  media="all">
+<!--  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+  <style>
+    .layui-layer-title{background:url(images/righttitlebig.png) repeat-x;font-weight:bold;color:#46647e; border:1px solid #c1d3de;height: 33px;line-height: 33px;}
+    .tabe_bot label{width: 70px;text-align: right;font-size: 14px;font-weight: 900;color: #46647e}
+    .l_left{float: left}
+    .tabe_bot input,.tabe_bot  select{width: 180px;height: 30px;border-radius: 6px;margin:0 20px 0 0;border: none;border: 1px #ccc solid;text-indent: 1em}
+    .tabe_btn{width: 60px;height: 30px;background-color: #68b86c;border: none;border-radius: 6px;color: #fff}
+  </style>
+  <title>工作日志</title>
+</head>
+
+<body onLoad="Workload()">
+<ul class="layui-nav layui-bg-blue" lay-bar="disabled">
+  <li class="layui-nav-item"><a href="">审核任务信息</a></li>
+  <li class="layui-nav-item"><a href="">审核结果判定</a></li>
+  <li class="layui-nav-item"><a href="">核办单生成</a></li>
+</ul>
+<div class="query">
+  <div class="tabe_bot">
+    <div class="l_left">
+      <label>送检材料编号：</label>
+      <input type="text" placeholder="请输入送检材料编号" id="tit"></div>
+    <div class="l_left">
+      <label>系统类别：</label>
+      <input type="text" placeholder="请输入系统类别" id="person"></div>
+    <div class="l_left">
+      <label>版本号：</label>
+      <input id="demo" placeholder="请输入版本号" /></div>
+    <div class="l_left">
+      <label>软件类别：</label>
+      <input id="software" placeholder="请输入软件类别" /></div>
+    <button class="tabe_btn " onClick=" getWorkTableData();">查询</button>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="table-operate ue-clear">
+  <!--<a href="#" class="add"  onclick="getWorkTableData()">添加</a>-->
+  <a href="javascript:;" class="out" onClick="outWork()">导出</a>
+  <!--<a href="javascript:;" class="edit">编辑</a>-->
+  <!--<a href="javascript:;" class="count">统计</a>-->
+  <!--<a href="javascript:;" class="check">审核</a>-->
+</div>
+<div class="table-box">
+  <table id="table" class="table_style"></table>
+</div>
+<div class="pagination ue-clear"></div>
+</body>
+<script type="text/javascript" src="js/jquery.js"></script>
+
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-table.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/date/js/laydate.js"></script>
+<script src="js/work.js"></script>
+
+<script>
+  !function(){
+    laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+    laydate({elem: '#demo'});//绑定元素
+  }();
+</script>
+<script th:src="@{/js/layer_v2.1/layer/layer.js}"></script>
+<script th:src="@{/js/layui.js}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+<script>
+  layui.use('element', function(){
+    var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+    //监听导航点击
+    element.on('nav(demo)', function(elem){
+      //console.log(elem)
+      layer.msg(elem.text());
+    });
+  });
+</script>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<HTML lang="en"  xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+  <TITLE> ZTREE DEMO </TITLE>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="../css/demo.css" type="text/css">
+  <link rel="stylesheet" href="../css/ztree/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="../js/ztree/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript" src="../js/ztree/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="../js/ztree/jquery.ztree.excheck.js"></script>
+  <th:block th:include="include :: header('新增任务')" />
+
+  <style>
+    .r{position:fixed; bottom:0;}
+  </style>
+
+</HEAD>
+<BODY>
+
+<div class="main-content">
+  <form id = "form-roles-add" class="form-horizontal">
+    <h4 class="form-header h4">新增角色信息</h4>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="col-sm-4 control-label ">角色名称:</label>
+          <div class="col-sm-5">
+            <input id="role_name" class="form-control" type="text" maxlength="30">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="col-sm-4 control-label is-required" >设置角色菜单权限范围:</label>
+          <div class="col-sm-8">
+            <input id="menuSel" type="text" readonly value=""  class="form-control" onclick="showMenu();" maxlength="30" />
+          </div>
+          <div id="menuContent" class="menuContent" style="display:none; position: fixed;">
+            <ul id="treeDemo" class="ztree" style="margin-top:0; width:580px; height: 400px;"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="col-sm-4 control-label is-required">菜单id:</label>
+          <div class="col-sm-5">
+            <input id="menu_ids"  class="form-control"  readonly type="text" value=""
+                   maxlength="30" >
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="row">
+  <div class="col-sm-offset-5 col-sm-10 r">
+    <button type="button" class="btn btn-sm btn-primary" ><i class="fa fa-check" onclick="saveRoles()"></i>提交</button>&nbsp;
+    <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/roles'"><i class="fa fa-reply-all"></i>关 闭 </button>
+  </div>
+</div>
+<script type="text/javascript">
+    var setting = {
+      check:{
+        enable:true
+      },
+      data:{
+        key:{
+          name:"menu_name"
+        },
+        simpleData:{
+          enable: true,
+          idKey:"menu_id",
+          pIdKey:"pid",
+          rootPId:"0"
+        }
+      },
+      view: {
+        dblClickExpand: false
+      },
+      callback: {
+        beforeClick: beforeClick,
+        onCheck: onCheck
+      }
+    };
+    var zNodes;
+
+    $.ajax({
+        async:false,
+        cache:false,
+        type:'post',
+        datatype:'json',
+        url:'/findMenuList',
+        success:function (data){
+            console.log("返回数据为："+data);
+            zNodes=data;
+        }
+    })
+
+  function beforeClick(treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+    zTree.checkNode(treeNode, !treeNode.checked, null, true);
+    return false;
+  }
+  function onCheck(e, treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            nodes = zTree.getCheckedNodes(true),
+            v = "";
+            menu_ids = "";
+    for (var i=0, l=nodes.length; i<l; i++) {
+      if(nodes[i].menu_name!=undefined){
+        v += nodes[i].menu_name+"、";
+        menu_ids += nodes[i].menu_id+"、";
+      }
+    }
+    if (v.length > 0 ) v = v.substring(0, v.length-1);
+    if (menu_ids.length > 0 ) menu_ids = menu_ids.substring(0, menu_ids.length-1);
+    var menuObj = $("#menuSel");
+    menuObj.attr("value", v);
+    $("#menu_ids").val(menu_ids);
+  }
+  function showMenu() {
+    var menuObj = $("#menuSel");
+    var menuOffset = $("#menuSel").offset();
+    $("#menuContent").css({left:menuOffset.left + "px", top:menuOffset.top + menuObj.outerHeight() + "px"}).slideDown("fast");
+
+    $("body").bind("mousedown", onBodyDown);
+  }
+  function hideMenu() {
+    $("#menuContent").fadeOut("fast");
+    $("body").unbind("mousedown", onBodyDown);
+  }
+  function onBodyDown(event) {
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuSel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+      hideMenu();
+    }
+  }
+
+  $(function() {
+    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+  });
+</script>
+<SCRIPT>
+  function saveRoles(){
+    //获取值
+    var role_name = $("#role_name").val();
+    var menu_names = $("#menuSel").val();
+    var menu_ids = $("#menu_ids").val();
+    $.ajax({
+      url: "/role_add",
+      type: "post",
+      dataType: "json",
+      async:false,
+      data: {
+        "role_name":role_name,
+        "menu_names":menu_names,
+        "menu_ids":menu_ids,
+      },
+      success:function (res){
+          if(res.code == 1){
+            alert(res.msg);
+            //刷新页面
+            // window.location.href = "/roles";
+          }else{
+            alert(res.errormsg);
+          }
+        }
+    })
+
+    //修改前
+    // $.ajax({
+    //   url: "/role_add",
+    //   type: "post",
+    //   dataType: "json",
+    //   async:false,
+    //   data: {
+    //     "role_name":role_name,
+    //   },
+    //   success:function (){
+    //         $.ajax({
+    //           url:"/save_role_menu",
+    //           type:"post",
+    //           dataType: "json",
+    //           data:{
+    //             "role_name":role_name,
+    //             "menu_names":menu_names,
+    //             "menu_ids":menu_ids,
+    //           },
+    //           success:function (){
+    //               $("#role_name").val("");
+    //               $("#menuSel").val("");
+    //               $("#menu_ids").val("");
+    //               alert("角色新增成功！");
+    //           }
+    //         })
+    //     }
+    // })
+  }
+</SCRIPT>
+</BODY>
+</HTML>

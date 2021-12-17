@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:include="include :: header('记录')" />
+
+    <style>
+        /*!
+  * Jasny Bootstrap v3.1.3 (http://jasny.github.io/bootstrap)
+  * Copyright 2012-2014 Arnold Daniels
+  * Licensed under Apache-2.0 (https://github.com/jasny/bootstrap/blob/master/LICENSE)
+  */
+
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        .btn-file > input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-size: 23px;
+            cursor: pointer;
+            filter: alpha(opacity=0);
+            opacity: 0;
+
+            direction: ltr;
+        }
+        .fileinput {
+            display: inline-block;
+            margin-bottom: 9px;
+        }
+        .fileinput .form-control {
+            display: inline-block;
+            padding-top: 7px;
+            padding-bottom: 5px;
+            margin-bottom: 0;
+            vertical-align: middle;
+            cursor: text;
+        }
+        .fileinput .thumbnail {
+            display: inline-block;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .fileinput .thumbnail > img {
+            max-height: 100%;
+        }
+        .fileinput .btn {
+            vertical-align: middle;
+        }
+        .fileinput-exists .fileinput-new,
+        .fileinput-new .fileinput-exists {
+            display: none;
+        }
+        .fileinput-inline .fileinput-controls {
+            display: inline;
+        }
+        .fileinput-filename {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        .form-control .fileinput-filename {
+            vertical-align: bottom;
+        }
+        .fileinput.input-group {
+            display: table;
+        }
+        .fileinput.input-group > * {
+            position: relative;
+            z-index: 2;
+        }
+        .fileinput.input-group > .btn-file {
+            z-index: 1;
+        }
+        .fileinput-new.input-group .btn-file,
+        .fileinput-new .input-group .btn-file {
+            border-radius: 0 4px 4px 0;
+        }
+        .fileinput-new.input-group .btn-file.btn-xs,
+        .fileinput-new .input-group .btn-file.btn-xs,
+        .fileinput-new.input-group .btn-file.btn-sm,
+        .fileinput-new .input-group .btn-file.btn-sm {
+            border-radius: 0 3px 3px 0;
+        }
+        .fileinput-new.input-group .btn-file.btn-lg,
+        .fileinput-new .input-group .btn-file.btn-lg {
+            border-radius: 0 6px 6px 0;
+        }
+        .form-group.has-warning .fileinput .fileinput-preview {
+            color: #8a6d3b;
+        }
+        .form-group.has-warning .fileinput .thumbnail {
+            border-color: #faebcc;
+        }
+        .form-group.has-error .fileinput .fileinput-preview {
+            color: #a94442;
+        }
+        .form-group.has-error .fileinput .thumbnail {
+            border-color: #ebccd1;
+        }
+        .form-group.has-success .fileinput .fileinput-preview {
+            color: #3c763d;
+        }
+        .form-group.has-success .fileinput .thumbnail {
+            border-color: #d6e9c6;
+        }
+        .input-group-addon:not(:first-child) {
+            border-left: 0;
+        }
+    </style>
+    <script  th:src="@{/js/jqueryNew.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-table.js}"></script>
+    <script th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/js/fileinput.js}" ></script>
+    <script th:src="@{/js/zh.js}" ></script>
+    <script th:src="@{/js/layui.js}" charset="utf-8"></script>
+</head>
+<body>
+<div class="main-content">
+    <form id="form-record-detail" class="form-horizontal">
+        <input type="hidden" id="record_id" th:value="${testRecord.getRecord_id()}"/>
+        <div class="row" align="center">
+            <img height="400px" width="400px"  th:src="@{${testRecord.url}}"  />
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">数据记录:</label>
+                    <div class="col-xs-10">
+                        <textarea id="text" maxlength="500" class="form-control" rows="6" th:text="${testRecord.getText()}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label ">是否符合：</label>
+                    <div class="col-sm-8">
+                        <select name="isSuitable" class="select form-control"  id="isSuitable">
+<!--                            <option value="">请选择</option>-->
+                            <option th:selected="${testRecord.isSuitable eq 0}" value="0">不符合</option>
+                            <option th:selected="${testRecord.isSuitable eq 1}" value="1">符合</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-sm btn-primary" onclick="save()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function save(){
+        var text = $('#text').val();
+        var isSuitable = $('#isSuitable').val();
+        var record_id = $('#record_id').val();
+        console.log(record_id);
+        $.ajax({
+            url:"/Records/update",
+            type:"post",
+            dataType:"json",
+            data:{
+                "record_id":record_id,
+                "text":text,
+                "isSuitable":isSuitable
+            },
+            success:function (res){
+                if (res.code == 1) {
+                    alert("修改成功");
+                }else if(res.erromsg!=null){
+                    alert(res.erromsg);
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

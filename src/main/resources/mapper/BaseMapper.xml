@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.BaseMapper">
+
+    <resultMap type="Issued_item" id="Issued_itemResult">
+        <id     property="item_id"     column="item_id"     />
+        <result property="point_name"   column="point_name"   />
+        <result property="aqjb"  column="aqjb"   />
+        <result property="nr"   column="nr"   />
+        <result property="dx"   column="dx"   />
+        <result property="ssbz"   column="ssbz"   />
+        <result property="fxdj"   column="fxdj"   />
+        <result property="sxh"   column="sxh"   />
+        <result property="zt"   column="zt"   />
+    </resultMap>
+
+    <select id="findSecutiryLevelByPointid" parameterType="int" resultType="String">
+        SELECT SECURITY.security_level FROM SECURITY WHERE Security_id IN (SELECT Security_id FROM ARTICLE WHERE article_id IN (SELECT article_id FROM POINT WHERE point_id= #{id}))
+    </select>
+
+    <select id="addPointName" parameterType="int" resultMap="Issued_itemResult">
+        SELECT item_id,p.point_id,point_name,aqjb,nr,dx,ssbz,fxdj,sxh,i.zt from ITEM i,POINT p WHERE i.POINT_ID=p.POINT_ID AND i.POINT_ID = #{id}
+    </select>
+
+    <select id="queryByPointId" parameterType="int" resultType="String">
+        SELECT point_name from POINT where point_id = #{id}
+    </select>
+
+    <!--BaseNode-->
+    <select id="queryNodeLv1ByBaseName" parameterType="String" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV1" WHERE "SUPER_ID" IN
+                                                       (SELECT "BASE_ID" AS "SUPER_ID" FROM "BASE" WHERE "BASE_NAME"=#{baseName})
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="queryNodeLv2BySuperId" parameterType="Integer" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "SUPER_ID"=#{superId}
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="queryNodeLv3BySuperId" parameterType="Integer" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV3" WHERE "SUPER_ID"=#{superId}
+        ORDER BY "NODE_ID"
+    </select>
+
+    <!--FunctionPoint-->
+    <select id="queryFunctionPointById" parameterType="Integer" resultType="FunctionPoint">
+        SELECT * FROM "TJM"."FUNCTION_POINT" WHERE "FID"=#{fid}
+        ORDER BY "FID"
+    </select>
+</mapper>

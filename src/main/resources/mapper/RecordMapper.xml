@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.RecordMapper">
+
+    <resultMap type="TestRecord" id="recordResult">
+        <id property="record_id"   column="record_id"   />
+        <result property="pointName"   column="pointName"   />
+        <result property="itemId"  column="itemId"   />
+        <result property="conSSBZ"   column="conSSBZ"   />
+        <result property="text"   column="text"   />
+        <result property="url"   column="url"   />
+        <result property="isSuitable"   column="isSuitable"   />
+        <result property="pointPlace"   column="pointPlace"   />
+    </resultMap>
+
+    <insert id="insertRecord" parameterType="TestRecord" >
+        <selectKey keyProperty="record_id" resultType="int" order="BEFORE">
+            select nvl(max("record_id"),0)+1 from "Test_record"
+        </selectKey>
+        insert into "Test_record"("record_id","check_id","itemId","conSSBZ","text","url","isSuitable","pointPlace")
+        values(#{record_id},#{pointName},#{itemId},#{conSSBZ},#{text},#{url},#{isSuitable},#{pointPlace})
+    </insert>
+
+    <select id="findAll" resultMap="recordResult">
+        select "record_id","check_id" as "pointName","itemId","conSSBZ","text","url","isSuitable","pointPlace"
+        from "Test_record"
+        where  "check_id" like concat(concat('%',#{check_id}),'%')
+        order by "record_id"
+    </select>
+
+    <select id="findDetail" resultMap="recordResult">
+        select "record_id","check_id" as "pointName","itemId","conSSBZ","text","url","isSuitable","pointPlace"
+        from "Test_record"
+        where  "record_id" = #{record_id}
+    </select>
+
+    <update id="updateRecord" parameterType="TestRecord">
+        update "Test_record"
+        <set>
+            "text" = #{text},
+            "isSuitable" = #{isSuitable},
+        </set>
+        where "record_id" = #{record_id}
+    </update>
+
+    <select id="sumQualified"  parameterType="String" resultType="int">
+        select count(*)
+        from "Test_record"
+        where "check_id" = #{check_id} and "isSuitable" = 1
+    </select>
+
+    <select id="sumNotQualified"  parameterType="String" resultType="int">
+        select count(*)
+        from "Test_record"
+        where "check_id" = #{check_id} and "isSuitable" = 0
+    </select>
+
+</mapper>
