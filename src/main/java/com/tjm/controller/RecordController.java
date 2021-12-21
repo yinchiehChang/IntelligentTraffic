@@ -1,6 +1,7 @@
 package com.tjm.controller;
 import com.tjm.pojo.Attachement;
 import com.tjm.pojo.ReceivedTask.TestRecord;
+import com.tjm.pojo.Record_item;
 import com.tjm.pojo.SysLog;
 import com.tjm.pojo.Task_issued;
 import com.tjm.service.AttachementService;
@@ -42,10 +43,21 @@ public class RecordController {
     @RequestMapping(value = "/getTheRecords",method = RequestMethod.POST)
     @ResponseBody
     public String getAll(@RequestBody List<TestRecord> testRecords) {
+        System.out.println("testRecords=="+testRecords);
         for(TestRecord test_Test_record : testRecords){
             String url = "/images/"+test_Test_record.getUrl();
             test_Test_record.setUrl(url);
             recordService.insertRecord(test_Test_record);
+        }
+        return "0";
+    }
+
+    @RequestMapping(value = "/getTheRecordItems",method = RequestMethod.POST)
+    @ResponseBody
+    public String getAllPoints(@RequestBody List<Record_item> record_items) {
+        System.out.println("record_items=="+record_items);
+        for(Record_item record_item : record_items){
+            recordService.insertRecordItems(record_item);
         }
         return "0";
     }
@@ -69,12 +81,53 @@ public class RecordController {
         return "data_collection";
     }
 
-    @RequestMapping("/seeAll/{check_id}")
-    public String getAllRecords(@PathVariable("check_id")String check_id,Model model) {
-        List<TestRecord> testRecordList = recordService.findAll(check_id);
+    @RequestMapping("/home_records")
+    public String getHomeTask_issued(Model model) {
+        Collection<Task_issued> task_issueds = projectService.queryTask_issued();
+//     将结果放在请求中
+        model.addAttribute("task_issueds",task_issueds);
+        return "home";
+    }
+
+    @RequestMapping("/seeAll/{check_id}/{item_id}")
+    public String getAllRecords(@PathVariable("check_id")String check_id,@PathVariable("item_id")int item_id,Model model) {
+        System.out.println(check_id);
+        System.out.println(item_id);
+        List<TestRecord> testRecordList = recordService.findByItemCheck(check_id,item_id);
 //     将结果放在请求中
         model.addAttribute("testRecordList",testRecordList);
         return "detail_records";
+    }
+
+    @RequestMapping("/seeAllItems/{check_id}")
+    public String getAllItems(@PathVariable("check_id")String check_id,Model model) {
+        List<Record_item> record_items = recordService.findAllItems(check_id);
+        System.out.println("record_items=="+record_items);
+        for(Record_item record_item:record_items){
+//            check_id =  check_id.substring(8,16);
+//            System.out.println("subCheck"+check_id);
+            int item_id = record_item.getItem_id();
+            List<TestRecord> testRecordList = recordService.findByItemCheck(check_id,item_id);
+            int suit = 0;
+            int Nosuit = 0;
+            for(TestRecord testRecord :testRecordList){
+                if(testRecord.getIsSuitable()==1){
+                    suit++;
+                }else {
+                    Nosuit++;
+                }
+            }
+            if(suit == testRecordList.size()){
+                record_item.setItem_status(2);
+            }else if(Nosuit == testRecordList.size()){
+                record_item.setItem_status(0);
+            }else {
+                record_item.setItem_status(1);
+            }
+        }
+//     将结果放在请求中
+        model.addAttribute("record_items",record_items);
+        return "detail_points";
     }
 
     @RequestMapping("/seeDetail/{record_id}")
@@ -111,12 +164,33 @@ public class RecordController {
     public Map<String,Integer> evaRecords(@RequestParam("check_id")String check_id) {
         Map<String,Integer> res = new HashMap<>();
         //总记录数
-        int num = recordService.findAll(check_id).size();
-        int NotqualifiedNum = recordService.sumNotQualified(check_id);
-        int qualifiedNum = recordService.sumQualified(check_id);
+//        int num = recordService.findAll(check_id).size();
+//        int NotqualifiedNum = recordService.sumNotQualified(check_id);
+//        int qualifiedNum = recordService.sumQualified(check_id);
+//        res.put("num",num);
+//        res.put("qualifiedNum",qualifiedNum);
+//        res.put("NotqualifiedNum",NotqualifiedNum);
+        List<Record_item> record_items = recordService.findAllItems(check_id);
+        //符合项
+        int qualifiedNum = 0;
+        //不符合项
+        int NotqualifiedNum = 0;
+        //部分符合项
+        int midqualifiedNum = 0;
+        int num = record_items.size();
+        for(Record_item record_item:record_items){
+            if(record_item.getItem_status()==0){
+                NotqualifiedNum++;
+            }else if(record_item.getItem_status()==1){
+                midqualifiedNum++;
+            }else{
+                qualifiedNum++;
+            }
+        }
         res.put("num",num);
         res.put("qualifiedNum",qualifiedNum);
         res.put("NotqualifiedNum",NotqualifiedNum);
+        res.put("midqualifiedNum",midqualifiedNum);
         return res;
     }
 
@@ -128,6 +202,21 @@ public class RecordController {
         //HttpServletRequest request = servletRequestAttributes.getRequest();
         HttpServletResponse response = servletRequestAttributes.getResponse();;
         List<TestRecord> testRecordList = recordService.findAll(check_id);
+        System.out.println(testRecordList);
+        long t1 = System.currentTimeMillis();
+        ExcelUtils.exportExcel(response, testRecordList, TestRecord.class);
+        long t2 = System.currentTimeMillis();
+        System.out.println(String.format("write over! cost:%sms", (t2 - t1)));
+    }
+
+    //将错误的测试记录导出到excle中
+    @RequestMapping(value = "/exportErrorExcel/{check_id}", method = RequestMethod.GET)
+    public void exportErrorExcel(@PathVariable("check_id")String check_id)  throws IOException {
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        //HttpServletRequest request = servletRequestAttributes.getRequest();
+        HttpServletResponse response = servletRequestAttributes.getResponse();;
+        List<TestRecord> testRecordList = recordService.findAllError(check_id);
         System.out.println(testRecordList);
         long t1 = System.currentTimeMillis();
         ExcelUtils.exportExcel(response, testRecordList, TestRecord.class);

@@ -20,129 +20,127 @@ import java.util.Map;
 public class FileUtil {
 
     /**
-     *
      * @param request
      * @param path_deposit 新增目录名 支持多级不存在目录
-     * @param file 待上传文件
+     * @param file         待上传文件
      * @param isRandomName 是否要基于文件名称重新编排名称
      * @return
      */
     public static Attachement uploadMaterials(HttpServletRequest request, String path_deposit, MultipartFile file, boolean isRandomName) {
         //上传
         try {
-            String[] typeImg={"docx", "zip", "txt","doc"};
+            String[] typeImg = {"docx", "zip", "txt", "doc"};
 
-            if(file!=null){
-                String origName=file.getOriginalFilename();// 文件原名称
-                System.out.println("上传的文件原名称:"+origName);
+            if (file != null) {
+                String origName = file.getOriginalFilename();// 文件原名称
+                System.out.println("上传的文件原名称:" + origName);
                 // 判断文件类型
-                String type=origName.indexOf(".")!=-1?origName.substring(origName.lastIndexOf(".")+1, origName.length()):null;
-                if (type!=null) {
-                    boolean booIsType=false;
+                String type = origName.indexOf(".") != -1 ? origName.substring(origName.lastIndexOf(".") + 1, origName.length()) : null;
+                if (type != null) {
+                    boolean booIsType = false;
                     for (int i = 0; i < typeImg.length; i++) {
                         if (typeImg[i].equals(type.toLowerCase())) {
-                            booIsType=true;
+                            booIsType = true;
                         }
                     }
                     //类型正确
                     if (booIsType) {
                         //存放文件的路径
-                        String path="/Users/tjm/IdeaProjects/Intelligent_traffic33/src/main/resources/review_materials/";
-                        System.out.print("文件上传的路径"+path);
+                        String path = "/src/main/resources/review_materials/";
+                        System.out.print("文件上传的路径" + path);
                         //组合名称
-                        String fileSrc = path+path_deposit;
+                        String fileSrc = path + path_deposit;
                         //是否随机名称
-                        if(isRandomName){
+                        if (isRandomName) {
                             //随机名规则：文件名+_CY+当前日期+8位随机数+文件后缀名
 //                            origName=origName.substring(0,origName.lastIndexOf("."))+"_CY"+formateString(new Date())+
 //                                    MathUtil.getRandom620(8)+origName.substring(origName.lastIndexOf("."));
-                            origName=origName.substring(0,origName.lastIndexOf("."))
-                                    +origName.substring(origName.lastIndexOf("."));
+                            origName = origName.substring(0, origName.lastIndexOf("."))
+                                    + origName.substring(origName.lastIndexOf("."));
                         }
-                        System.out.println("随机文件名："+origName);
+                        System.out.println("随机文件名：" + origName);
                         //判断是否存在目录
-                        File targetFile=new File(fileSrc,origName);
-                        if(!targetFile.exists()){
+                        File targetFile = new File(fileSrc, origName);
+                        if (!targetFile.exists()) {
                             targetFile.getParentFile().mkdirs();//创建目录
                         }
 
                         //上传
                         file.transferTo(targetFile);
                         //完整路径
-                        System.out.println("完整路径:"+targetFile.getAbsolutePath());
+                        System.out.println("完整路径:" + targetFile.getAbsolutePath());
 
                         //将存入文件路径存入数据库中
-                        Attachement attachement = new Attachement(MathUtil.getRandom620(8),origName,targetFile.getAbsolutePath(),type);
+                        Attachement attachement = new Attachement(MathUtil.getRandom620(8), origName, targetFile.getAbsolutePath(), type);
                         return attachement;
                     }
                 }
             }
             return null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
     /**
-     *
      * @param request
-     * @param file 待文件
+     * @param file         待文件
      * @param isRandomName 是否要基于图片名称重新编排名称
      * @return
      */
     public static Attachement uploadImage(HttpServletRequest request, MultipartFile file, boolean isRandomName) {
         //上传
         try {
-            String[] typeImg={"jpg", "gif", "png", "docx", "zip", "txt","doc"};
+            String[] typeImg = {"jpg", "gif", "png", "docx", "zip", "txt", "doc"};
 
-            if(file!=null){
-                String origName=file.getOriginalFilename();// 文件原名称
-                System.out.println("上传的文件原名称:"+origName);
+            if (file != null) {
+                String origName = file.getOriginalFilename();// 文件原名称
+                System.out.println("上传的文件原名称:" + origName);
                 // 判断文件类型
-                String type=origName.indexOf(".")!=-1?origName.substring(origName.lastIndexOf(".")+1, origName.length()):null;
-                if (type!=null) {
-                    boolean booIsType=false;
+                String type = origName.indexOf(".") != -1 ? origName.substring(origName.lastIndexOf(".") + 1, origName.length()) : null;
+                if (type != null) {
+                    boolean booIsType = false;
                     for (int i = 0; i < typeImg.length; i++) {
                         if (typeImg[i].equals(type.toLowerCase())) {
-                            booIsType=true;
+                            booIsType = true;
                         }
                     }
                     //类型正确
                     if (booIsType) {
                         //存放文件的路径
-                        String path="/Users/tjm/IdeaProjects/Intelligent_traffic33/src/main/resources/static/images/";
-                        System.out.print("文件上传的路径"+path);
+                        String path = "/src/main/resources/static/images/";
+                        System.out.print("文件上传的路径" + path);
                         //组合名称
                         String fileSrc = path;
                         //是否随机名称
-                        if(isRandomName){
+                        if (isRandomName) {
                             //随机名规则：文件名+_CY+当前日期+8位随机数+文件后缀名
 //                            origName=origName.substring(0,origName.lastIndexOf("."))+"_CY"+formateString(new Date())+
 //                                    MathUtil.getRandom620(8)+origName.substring(origName.lastIndexOf("."));
-                            origName=origName.substring(0,origName.lastIndexOf("."))
-                                    +origName.substring(origName.lastIndexOf("."));
+                            origName = origName.substring(0, origName.lastIndexOf("."))
+                                    + origName.substring(origName.lastIndexOf("."));
                         }
-                        System.out.println("随机文件名："+origName);
+                        System.out.println("随机文件名：" + origName);
                         //判断是否存在目录
-                        File targetFile=new File(fileSrc,origName);
-                        if(!targetFile.exists()){
+                        File targetFile = new File(fileSrc, origName);
+                        if (!targetFile.exists()) {
                             targetFile.getParentFile().mkdirs();//创建目录
                         }
 
                         //上传
                         file.transferTo(targetFile);
                         //完整路径
-                        System.out.println("完整路径:"+targetFile.getAbsolutePath());
+                        System.out.println("完整路径:" + targetFile.getAbsolutePath());
 
                         //将存入文件路径存入数据库中
-                        Attachement attachement = new Attachement(MathUtil.getRandom620(8),origName,targetFile.getAbsolutePath(),type);
+                        Attachement attachement = new Attachement(MathUtil.getRandom620(8), origName, targetFile.getAbsolutePath(), type);
                         return attachement;
                     }
                 }
             }
             return null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -150,14 +148,15 @@ public class FileUtil {
 
     /**
      * 格式化日期并去掉”-“
+     *
      * @param date
      * @return
      */
-    public static String formateString(Date date){
+    public static String formateString(Date date) {
         SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
         String list[] = dateFormater.format(date).split("-");
         String result = "";
-        for (int i=0;i<list.length;i++) {
+        for (int i = 0; i < list.length; i++) {
             result += list[i];
         }
         return result;
@@ -221,19 +220,20 @@ public class FileUtil {
      * <p>第二步下载生成的文件</p>
      * <p>第三步删除生成的临时文件</p>
      * 模版变量中变量格式：{{foo}}
+     *
      * @param templatePath word模板地址
-     * @param temDir 生成临时文件存放地址
-     * @param fileName 文件名
-     * @param params 替换的参数
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
+     * @param temDir       生成临时文件存放地址
+     * @param fileName     文件名
+     * @param params       替换的参数
+     * @param request      HttpServletRequest
+     * @param response     HttpServletResponse
      */
     public static void exportWord(String templatePath, String temDir, String fileName, Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) {
-        Assert.notNull(templatePath,"模板路径不能为空");
-        Assert.notNull(temDir,"临时文件路径不能为空");
-        Assert.notNull(fileName,"导出文件名不能为空");
-        Assert.isTrue(fileName.endsWith(".docx"),"word导出请使用docx格式");
-        if (!temDir.endsWith("/")){
+        Assert.notNull(templatePath, "模板路径不能为空");
+        Assert.notNull(temDir, "临时文件路径不能为空");
+        Assert.notNull(fileName, "导出文件名不能为空");
+        Assert.isTrue(fileName.endsWith(".docx"), "word导出请使用docx格式");
+        if (!temDir.endsWith("/")) {
             temDir = temDir + File.separator;
         }
         File dir = new File(temDir);

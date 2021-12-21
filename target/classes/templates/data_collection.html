@@ -14,6 +14,7 @@
     <!-- Custom styles for this template -->
     <link th:href="@{/css/dashboard.css}" rel="stylesheet">
 
+
     <style>
         .tree_left{box-sizing:border-box;overflow-y: auto;width:19%;border: 1px #c1d3de solid;margin-right: 1%;border-top:none;}
         .tree_left h6,.tree_right h6{line-height: 30px;font-weight: bold;padding-left: 6px ;color: #000;font-size: 14px}
@@ -77,6 +78,7 @@
                     <button class="btn btn-sm btn-info" th:onclick="openDetail([[${task_issued.check_id}]])">编辑</button>
                     <button class="btn btn-sm btn-danger" th:onclick="evaluation([[${task_issued.check_id}]])">测评</button>
                     <a class="btn btn-sm btn-primary" th:onclick="exportExcel([[${task_issued.check_id}]])">导出</a>
+                    <a class="btn btn-sm btn-success" th:onclick="exportErrorExcel([[${task_issued.check_id}]])">导出错误报告</a>
                 </td>
                 </th:each>
             </tr>
@@ -87,32 +89,12 @@
 </div>
 
 <script type="text/javascript">
-    //左边按钮的点击事件
-    // window.onload = function(){
-    //     var arr = document.getElementsByTagName('button');
-    //     for(var i = 0;i<arr.length;i++){
-    //         arr[i].onclick = function(){
-    //             //this是当前激活的按钮，在这里可以写对应的操作
-    //             if(this.className == 'btn btn-sm btn-danger'){
-    //                 this.className = 'btn btn-sm btn-success';
-    //                 var name = this.id;
-    //                 var btn = document.getElementsByClassName('btn btn-sm btn-success');
-    //                 for(var j=0;j<btn.length;j++){
-    //                     if(btn[j].id!=name){
-    //                         btn[j].className = 'btn btn-sm btn-danger';
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
     function openDetail(check_id){
         var id = check_id.substring(8,16);
-        window.location.href = "/Records/seeAll/"+id;
+        window.location.href = "/Records/seeAllItems/"+id;
     }
 
     function evaluation(check_id){
-        console.log(check_id);
         $.ajax({
             url: "/Records/evaluation",
             type:"post",
@@ -121,7 +103,7 @@
                 "check_id": check_id,
             },
             success:function (res){
-                alert("测试项一共"+res.num+"条,"+"符合项一共"+res.qualifiedNum+"条,"+"不符合项一共"+res.NotqualifiedNum+"条");
+               alert("测试项一共"+res.num+"条,"+"合格项一共"+res.qualifiedNum+"条,"+"不合格项一共"+res.NotqualifiedNum+"条,"+"部分合格项一共"+res.midqualifiedNum+"条");
             }
         })
     }
@@ -130,8 +112,13 @@
         var id = check_id.substring(8,16);
         window.location.href = "/Records/exportExcel/"+id;
     }
-</script>
 
+    function exportErrorExcel(check_id){
+        var id = check_id.substring(8,16);
+        window.location.href = "/Records/exportErrorExcel/"+id;
+    }
+</script>
+<script th:src="@{/js/alert.js}"></script>
 </body>
 <script type="text/javascript" th:src="@{/js/jqueryNew.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>

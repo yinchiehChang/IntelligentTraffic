@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="include :: header('新增任务')"/>
+
+    </head>
+    <body>
+        <div class="main-content">
+
+            <h4 class="form-header h4">Word文档解析</h4>
+            <div class="container">
+                <input id="uploadWordFile" type="file" class="file" name="file"/>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-1">
+                    <input id="parseWord" type="submit" class="btn btn-sm btn-primary" value="解析">
+                </div>
+            </div>
+
+
+            <form id="form-user-add" class="form-horizontal" action="/quality/addQuality" method="post">
+                <!-- platform-->
+                <h4 class="form-header h4">新增质量评价任务</h4>
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label is-required">任务编号:</label>
+                        <div class="col-sm-8">
+                            <input id="qualityId" name="quality_id" placeholder="请输入任务编号" class="form-control"
+                                   type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label is-required">软件名称:</label>
+                        <div class="col-sm-8">
+                            <input id="softwareName" name="software_name" placeholder="请输入软件名称"
+                                   class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label is-required">软件版本:</label>
+                        <div class="col-sm-8">
+                            <input name="software_version" placeholder="请输入软件版本" class="form-control"
+                                   type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label is-required">软件类别:</label>
+                        <div class="col-sm-8">
+                            <select name="software_category" class="form-control" type="text" maxlength="30" required>
+                                <option value="嵌入式软件">嵌入式软件</option>
+                                <option value="桌面应用软件">桌面应用软件</option>
+                                <option value="中间件软件">中间件软件</option>
+                                <option value="移动应用软件">移动应用软件</option>
+                                <option value="大数据与云计算软件">大数据与云计算软件</option>
+                                <option value="人工智能软件">人工智能软件</option>
+                                <option value="其他" selected>其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label is-required">生产单位:</label>
+                        <div class="col-sm-8">
+                            <input id="productionUnit" name="production_unit" placeholder="请输入生产单位"
+                                   class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">软件说明:</label>
+                        <div class="col-sm-8">
+                            <input name="software_desc" placeholder="请输入软件说明" class="form-control" type="text"
+                                   maxlength="30">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">联系人:</label>
+                        <div class="col-sm-8">
+                            <input id="contactPerson" name="contact_person" placeholder="请输入联系人"
+                                   class="form-control" type="text" maxlength="30">
+                        </div>
+                    </div>
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">联系电话:</label>
+                        <div class="col-sm-8">
+                            <input id="contactNumber" name="contact_number" placeholder="请输入联系电话"
+                                   class="form-control" type="text" maxlength="30">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">规格型号:</label>
+                        <div class="col-sm-8">
+                            <input id="specificationModel" name="specification_model" placeholder="请输入规格型号"
+                                   class="form-control" type="text" maxlength="30">
+                        </div>
+                    </div>
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">软件架构:</label>
+                        <div class="col-sm-8">
+                            <select name="software_arch" class="form-control" type="text" maxlength="30">
+                                <option value="分层模式">分层模式</option>
+                                <option value="客户端／服务器模式">客户端／服务器模式</option>
+                                <option value="主／从模式">主／从模式</option>
+                                <option value="管道／过滤器模式">管道／过滤器模式</option>
+                                <option value="代理模式">代理模式</option>
+                                <option value="对等模式">对等模式</option>
+                                <option value="事件总线模式">事件总线模式</option>
+                                <option value="MVC模式">MVC模式</option>
+                                <option value="黑板模式">黑板模式</option>
+                                <option value="解析器模式">解析器模式</option>
+                                <option value="其他" selected>其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">数据库信息:</label>
+                        <div class="col-sm-8">
+                            <input name="db_info" placeholder="请输入数据库信息" class="form-control" type="text"
+                                   maxlength="30">
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="form-header h4">参考标准</h4>
+                <div class="row">
+                    <div class="columns col-sm-6 form-group">
+                        <label class="col-sm-4 control-label">参考标准:</label>
+                        <div class="col-sm-8">
+                            <select name="isGuideLine" class="form-control" type="text" maxlength="30">
+                                <option th:each="list:${lists}" th:value="${list}" th:text="${list}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="form-header h5">软件需求规格说明文件提交</h5>
+                <div class="container">
+                    <input id="uploadSpecification" type="file" class="file" name="file"/>
+                </div>
+
+                <h5 class="form-header h5">软件说明书文件提交</h5>
+                <div class="container">
+                    <input id="uploadManual" type="file" class="file" name="file"/>
+                </div>
+
+                <h5 class="form-header h5">代码文件提交（以zip文件提交）</h5>
+                <div class="container">
+                    <input id="uploadCode" type="file" class="file" name="file"/>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="submit" class="btn btn-sm btn-primary" value="提交">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+
+        <!-- 上传文件插件 -->
+        <th:block th:include="include-origin :: bootstrap-file-upload-js"/>
+        <script type="text/javascript">
+            $("#parseWord").click(function () {
+                //异步请求数据
+                $.ajax({
+                    type: "post",
+                    async: true,
+                    url: "/quality/parseWord",
+                    dataType: "json",
+                    success: function (result) {
+
+                        if (result.errormsg != null) {
+                            alert(result.errormsg);
+                        } else {
+                            var softwareName = $("#softwareName");
+                            var productionUnit = $("#productionUnit");
+                            var contactPerson = $("#contactPerson");
+                            var contactNumber = $("#contactNumber");
+                            var specificationModel = $("#specificationModel");
+                            var qualityId = $("#qualityId");
+
+                            softwareName.val(result.softwareName);
+                            productionUnit.val(result.productionUnit);
+                            contactPerson.val(result.contactPerson);
+                            contactNumber.val(result.contactNumber);
+                            specificationModel.val(result.specificationModel);
+                            qualityId.val(result.qualityId);
+                        }
+
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $("#uploadWordFile").fileinput({
+                language: 'zh', //设置语言
+                uploadUrl: "/quality/upLoadWordParse", //上传的地址
+                allowedFileExtensions: ['docx', 'doc'], //接收的文件后缀
+                showClose: false,//是否显示关闭按钮
+                uploadAsync: true, //默认异步上传
+                showUpload: true, //是否显示上传按钮
+                showRemove: true, //显示移除按钮
+                showPreview: true, //是否显示预览
+                showCaption: false, //是否显示标题
+                browseClass: "btn btn-primary", //按钮样式
+                dropZoneEnabled: true, //是否显示拖拽区域
+                maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
+                maxFileCount: 1, //表示允许同时上传的最大文件个数
+                enctype: 'multipart/form-data',
+                validateInitialCount: true,
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            }).on('filepreupload', function (event, data, previewId, index) {     //上传中
+                console.log('文件正在上传');
+            }).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
+                var form = data.form, files = data.files, extra = data.extra,
+                    response = data.response, reader = data.reader;
+                console.log(response);//打印出返回的json
+                console.log(response.status);//打印出路径
+            }).on('fileerror', function (event, data, msg) {  //一个文件上传失败
+                console.log('文件上传失败！' + data.status);
+            })
+        </script>
+
+        <script>
+            $("#uploadSpecification").fileinput({
+                language: 'zh', //设置语言
+                uploadUrl: "/quality/uploadSpecification", //上传的地址
+                allowedFileExtensions: ['docx', 'doc'], //接收的文件后缀
+                showClose: false,//是否显示关闭按钮
+                uploadAsync: true, //默认异步上传
+                showUpload: true, //是否显示上传按钮
+                showRemove: true, //显示移除按钮
+                showPreview: true, //是否显示预览
+                showCaption: false, //是否显示标题
+                browseClass: "btn btn-primary", //按钮样式
+                dropZoneEnabled: true, //是否显示拖拽区域
+                maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
+                maxFileCount: 10, //表示允许同时上传的最大文件个数
+                enctype: 'multipart/form-data',
+                validateInitialCount: true,
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            }).on('filepreupload', function (event, data, previewId, index) {     //上传中
+                console.log('文件正在上传');
+            }).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
+                var form = data.form, files = data.files, extra = data.extra,
+                    response = data.response, reader = data.reader;
+                console.log(response);//打印出返回的json
+                console.log(response.status);//打印出路径
+            }).on('fileerror', function (event, data, msg) {  //一个文件上传失败
+                console.log('文件上传失败！' + data.status);
+            })
+        </script>
+
+        <script>
+            $("#uploadManual").fileinput({
+                language: 'zh', //设置语言
+                uploadUrl: "/quality/uploadManual", //上传的地址
+                allowedFileExtensions: ['docx', 'doc'], //接收的文件后缀
+                showClose: false,//是否显示关闭按钮
+                uploadAsync: true, //默认异步上传
+                showUpload: true, //是否显示上传按钮
+                showRemove: true, //显示移除按钮
+                showPreview: true, //是否显示预览
+                showCaption: false, //是否显示标题
+                browseClass: "btn btn-primary", //按钮样式
+                dropZoneEnabled: true, //是否显示拖拽区域
+                maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
+                maxFileCount: 10, //表示允许同时上传的最大文件个数
+                enctype: 'multipart/form-data',
+                validateInitialCount: true,
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            }).on('filepreupload', function (event, data, previewId, index) {     //上传中
+                console.log('文件正在上传');
+            }).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
+                var form = data.form, files = data.files, extra = data.extra,
+                    response = data.response, reader = data.reader;
+                console.log(response);//打印出返回的json
+                console.log(response.status);//打印出路径
+            }).on('fileerror', function (event, data, msg) {  //一个文件上传失败
+                console.log('文件上传失败！' + data.status);
+            })
+        </script>
+
+        <script>
+            $("#uploadCode").fileinput({
+                language: 'zh', //设置语言
+                uploadUrl: "/quality/uploadCode", //上传的地址
+                allowedFileExtensions: ['zip'], //接收的文件后缀
+                showClose: false,//是否显示关闭按钮
+                uploadAsync: true, //默认异步上传
+                showUpload: true, //是否显示上传按钮
+                showRemove: true, //显示移除按钮
+                showPreview: true, //是否显示预览
+                showCaption: false, //是否显示标题
+                browseClass: "btn btn-primary", //按钮样式
+                dropZoneEnabled: true, //是否显示拖拽区域
+                maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
+                maxFileCount: 10, //表示允许同时上传的最大文件个数
+                enctype: 'multipart/form-data',
+                validateInitialCount: true,
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            }).on('filepreupload', function (event, data, previewId, index) {     //上传中
+                console.log('文件正在上传');
+            }).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
+                var form = data.form, files = data.files, extra = data.extra,
+                    response = data.response, reader = data.reader;
+                console.log(response);//打印出返回的json
+                console.log(response.status);//打印出路径
+            }).on('fileerror', function (event, data, msg) {  //一个文件上传失败
+                console.log('文件上传失败！' + data.status);
+            })
+        </script>
+
+    </body>
+
+</html>

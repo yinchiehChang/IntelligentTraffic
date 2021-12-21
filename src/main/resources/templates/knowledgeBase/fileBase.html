@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/animate.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.min.css?v=20200903}" rel="stylesheet"/>
+    <link th:href="@{/ruoyi/css/ry-ui.css?v=4.6.2}" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/info-mgt.css" />
+    <link rel="stylesheet" href="css/layui.css" />
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/fileinput.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style>
+        .tree_left{box-sizing:border-box;overflow-y: auto;width:19%;border: 1px #c1d3de solid;margin-right: 1%;border-top:none;}
+        .tree_left h6,.tree_right h6{line-height: 30px;font-weight: bold;padding-left: 6px ;color: #000;font-size: 14px}
+        .tree_left_top{margin: 6px}
+        .tree_input input{border: 1px #ccc solid;margin:3px 0 0 10px;border-radius: 4px;
+        }
+        .layui-layer-title{background:url(images/righttitlebig.png) repeat-x;font-weight:bold;color:#46647e; border:1px solid #c1d3de;height: 33px;line-height: 33px;}
+        .tabe_bot label{padding: 10px;text-align: right;font-size: 14px;font-weight: 900;color: #46647e}
+        .l_left{float: left}
+        .tabe_bot input,.tabe_bot  select{width: 180px;height: 30px;border-radius: 6px;margin:0 20px 0 0;border: none;border: 1px #ccc solid}
+        .tabe_btn{width: 60px;height: 30px;background-color: #68b86c;border: none;border-radius: 6px;color: #fff}
+
+        div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #99c9db;text-align: left;padding: 2px;z-index: 999}
+        div#rMenu ul li{ margin: 1px 0;padding: 5px 15px;cursor: pointer;list-style: none outside none;background-color: #5a8cc4;color: #fff  }
+        div#rMenu ul li:hover{color: #000;background-color: #ccc}
+        #rMenu ul{margin: 0;padding: 0};
+        .ztree_add_div {
+            width:200px;
+            height:100px;
+            border:1px solid #cccccc;
+            padding-top:10px;
+            padding-bottom:10px;
+            display:none;
+        }
+        .ztree_add_div p {
+
+            padding-bottom:10px;
+            padding-top:10px;
+        }
+        .bot_btn .btn{width: 40px;height: 24px;background-color: #68b86c;border: none;border-radius: 6px;color: #fff;margin-right: 15px;}
+        .bot_btn .btn1{background-color: #c1d3de;border: none;border-radius: 6px;color: #000;margin-right: 0}
+        .bot_btn{width: 100%;height: 30px;font-size:13px;text-align:center;}
+
+        .layui-tab-brief>.layui-tab-title .layui-this {
+            color: #2C91E6
+        }
+        .layui-tab-brief>.layui-tab-title .layui-this:after {
+            border-bottom: 2px solid #2C91E6;
+        }
+    </style>
+
+
+    <script src="js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-table.js"></script>
+    <script src="/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/layui.js"></script>
+    <script src="/js/fileinput.js"></script>
+    <script src="/js/zh.js"></script>
+    <script src="js/knowledgeBase.js"></script>
+    <script>
+        function change() {
+            var height01 = $(window).height();
+            $(".tree_left").css('height', height01 - 35+"px");
+        }
+    </script>
+    <title>知识库</title>
+</head>
+
+<body th:onload="'javascript:onLoad('+ ${bid} +', 1)'">
+<div class="title"><h2 id="left_title"></h2></div>
+
+<div class="l_left" id="left_body" style="width: 100%">
+    <div class="query" id="query"> </div>
+    <div class="table-operate ue-clear">
+        <a class="add" data-toggle="modal" data-target="#FileUploadModal">添加</a>
+    </div>
+
+    <div id="KB-content"> </div>
+
+
+</div>
+
+<div class="pagination ue-clear"></div>
+<!--   -----------------------FileUpload Modal-----------------------    -->
+<div class="modal fade bd-example-modal-lg" id="FileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUpload" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileUpload">上传知识库文件</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="uploadKBFile" type="file" class="file" multiple="multiple" name="file"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------FileDelete Modal-----------------------    -->
+<div class="modal fade" id="FileDeleteModal" tabindex="-1" role="dialog" aria-labelledby="fileDelete" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileDelete">删除文件</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                确认删除该文件？
+            </div>
+            <div class="modal-footer" id="deleteFile-footer">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+layui.use('element', function(){
+  var element = layui.element;
+
+  //…
+});
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+$("#uploadKBFile").fileinput({
+        language: 'zh', //设置语言
+        uploadUrl: "/uploadKBFile?bid=" + [[${bid}]], //上传的地址
+        allowedFileExtensions: ['docx', 'doc', 'pdf'], //接收的文件后缀
+        showClose: false,//是否显示关闭按钮
+        uploadAsync: true, //默认异步上传
+        showUpload: true, //是否显示上传按钮
+        showRemove: true, //显示移除按钮
+        showPreview: true, //是否显示预览
+        showCaption: false, //是否显示标题
+        browseClass: "btn btn-primary", //按钮样式
+        dropZoneEnabled: true, //是否显示拖拽区域
+        maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
+        maxFileCount: 10, //表示允许同时上传的最大文件个数
+        enctype: 'multipart/form-data',
+        validateInitialCount: true,
+        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+        msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+    }).on('filepreupload', function (event, data, previewId, index) {     //上传中
+        console.log('文件正在上传');
+    }).on("fileuploaded", function (event, data, previewId, index) {    //一个文件上传成功
+        var form = data.form, files = data.files, extra = data.extra,
+            response = data.response, reader = data.reader;
+        console.log(response);//打印出返回的json
+        console.log(response.status);//打印出路径
+    }).on('fileerror', function (event, data, msg) {  //一个文件上传失败
+        console.log('文件上传失败！' + data.status);
+    })
+
+$("#uploadKBFile").on('fileuploaded', function() {
+    $("#uploadKBFile").modal('hide');
+    window.location.reload();
+});
+</script>
+
+</html>

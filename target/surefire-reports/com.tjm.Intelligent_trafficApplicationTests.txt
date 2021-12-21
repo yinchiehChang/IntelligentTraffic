@@ -1,4 +1,9 @@
 -------------------------------------------------------------------------------
 Test set: com.tjm.Intelligent_trafficApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 36.404 s - in com.tjm.Intelligent_trafficApplicationTests
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.564 s <<< FAILURE! - in com.tjm.Intelligent_trafficApplicationTests
+contextLoads  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.tjm.Intelligent_trafficApplication]; nested exception is org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'qualityIndexController' for bean class [com.tjm.controller.quality.QualityIndexController] conflicts with existing, non-compatible bean definition of same name and class [com.tjm.controller.QualityIndexController]
+Caused by: org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'qualityIndexController' for bean class [com.tjm.controller.quality.QualityIndexController] conflicts with existing, non-compatible bean definition of same name and class [com.tjm.controller.QualityIndexController]
+

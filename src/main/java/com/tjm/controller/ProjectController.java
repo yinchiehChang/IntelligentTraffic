@@ -225,7 +225,6 @@ public class ProjectController {
                 itemList.addAll(baseService.queryByPointids(point_ids_toInt[j]));
             }
             task_issuedList.get(i).setItems(itemList);
-            System.out.println(task_issuedList.get(i));
             projectService.updateStatus(task_issuedList.get(i));
         }
         System.out.println("安卓端已接受任务！");
@@ -233,17 +232,17 @@ public class ProjectController {
         return task_issuedList;
     }
 
-    @RequestMapping(value = "/exportdoc/{uid}", method = RequestMethod.GET)
-    public String toDownload(@PathVariable("uid")int uid, HttpServletRequest request, HttpServletResponse response) {
-        Map<String,Object> dataMap = new HashMap<String, Object>();
-        String comment = "机房场地没有选择在具有防震、防风和防雨等能力的建筑内。\n" +
-                "机房出入口没有配置电子门禁系统，控制、鉴别和记录进入的人员。\n";
-        dataMap.put("comment",comment);
-        String filename = "test等级保护测评问题汇总（物理部分）.docx";
-        FileUtil.exportWord("word/test等级保护测评问题汇总（物理部分）2021-10-11 092633.docx",
-                "/Users/tjm/doc",filename,dataMap,request,response);
-        return "data_collection";
-    }
+//    @RequestMapping(value = "/exportdoc/{uid}", method = RequestMethod.GET)
+//    public String toDownload(@PathVariable("uid")int uid, HttpServletRequest request, HttpServletResponse response) {
+//        Map<String,Object> dataMap = new HashMap<String, Object>();
+//        String comment = "机房场地没有选择在具有防震、防风和防雨等能力的建筑内。\n" +
+//                "机房出入口没有配置电子门禁系统，控制、鉴别和记录进入的人员。\n";
+//        dataMap.put("comment",comment);
+//        String filename = "test等级保护测评问题汇总（物理部分）.docx";
+//        FileUtil.exportWord("word/test等级保护测评问题汇总（物理部分）2021-10-11 092633.docx",
+//                "/Users/tjm/doc",filename,dataMap,request,response);
+//        return "data_collection";
+//    }
 }
 
 

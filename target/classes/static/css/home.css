@@ -28,7 +28,7 @@ body{ font-family:'微软雅黑';}
 .article .content .toollist li.add-btn img{ margin-top:18px;}
 
 /*通知公告*/
-.notice .content, .matter .content{ padding-top:11px; height:138px;}
+.notice .content, .matter .content{ padding-top:11px; height:400px;}
 .notice .content .notice-list li{ line-height:25px;}
 .notice .content .notice-list li .notice-title{ float:left; margin-left:14px; padding-left:17px; color:#000000; font-size:12px; background:url(../images/listico.png) no-repeat left center;}
 .notice .content .notice-list li .notice-title:hover{ text-decoration:underline;}

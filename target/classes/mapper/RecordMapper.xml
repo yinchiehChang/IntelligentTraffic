@@ -16,6 +16,14 @@
         <result property="pointPlace"   column="pointPlace"   />
     </resultMap>
 
+    <resultMap type="Record_item" id="recordItemResult">
+        <id property="record_itemNum"   column="record_itemNum"   />
+        <result property="nr"   column="nr"   />
+        <result property="item_id"  column="item_id"   />
+        <result property="item_status"   column="item_status"   />
+        <result property="check_id"   column="check_id"   />
+    </resultMap>
+
     <insert id="insertRecord" parameterType="TestRecord" >
         <selectKey keyProperty="record_id" resultType="int" order="BEFORE">
             select nvl(max("record_id"),0)+1 from "Test_record"
@@ -24,11 +32,41 @@
         values(#{record_id},#{pointName},#{itemId},#{conSSBZ},#{text},#{url},#{isSuitable},#{pointPlace})
     </insert>
 
+    <insert id="insertRecordItems" parameterType="Record_item" >
+        <selectKey keyProperty="record_itemNum" resultType="int" order="BEFORE">
+            select nvl(max("record_itemNum"),0)+1 from "Record_item"
+        </selectKey>
+        insert into "Record_item"("record_itemNum","nr","item_id","item_status","check_id")
+        values(#{record_itemNum},#{nr},#{item_id},#{item_status},#{check_id})
+    </insert>
+
     <select id="findAll" resultMap="recordResult">
         select "record_id","check_id" as "pointName","itemId","conSSBZ","text","url","isSuitable","pointPlace"
         from "Test_record"
         where  "check_id" like concat(concat('%',#{check_id}),'%')
         order by "record_id"
+    </select>
+
+    <select id="findAllError" resultMap="recordResult">
+        select "record_id","check_id" as "pointName","itemId","conSSBZ","text","url","isSuitable","pointPlace"
+        from "Test_record"
+        where  "check_id" like concat(concat('%',#{check_id}),'%') and "isSuitable"=0
+        order by "record_id"
+    </select>
+
+    <select id="findByItemCheck" resultMap="recordResult">
+        select "record_id","check_id" as "pointName","itemId","conSSBZ","text","url","isSuitable","pointPlace"
+        from "Test_record"
+        where  "check_id" like concat(concat('%',#{check_id}),'%')
+        and "itemId" = #{item_id}
+        order by "record_id"
+    </select>
+
+    <select id="findAllItems" resultMap="recordItemResult">
+        select "record_itemNum","nr","item_id","item_status","check_id"
+        from "Record_item"
+        where  "check_id" like concat(concat('%',#{check_id}),'%')
+        order by "record_itemNum"
     </select>
 
     <select id="findDetail" resultMap="recordResult">

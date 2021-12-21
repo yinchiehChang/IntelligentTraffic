@@ -20,7 +20,14 @@ public interface QualityService {
 
     //根据status查询
     List<Quality> findQualityByStatus(Integer status);
-
+    //根据status和日期查询
+    List<Quality> findQualityByStatusAndTime(Integer status, Long startTime, Long endTime);
+    //根据cate, model, status查询
+    List<Quality> findQualityByCateModelStatus(String software_category, String model, Integer status);
+    //根据cate查询
+    List<Quality> findQualityByCate(String software_category);
+    //根据model查询
+    List<Quality> findQualityByModel(String model);
 
     //根据id删除
     int deleteQualityById(int uid);
@@ -30,4 +37,14 @@ public interface QualityService {
 
     //更新status
     int updatesStatus(Quality quality);
+
+    //更新得分结果
+    int updateFinalScore(int uid, double final_score);
+    //更新模型
+    int updateModel(int uid, String model);
+    //更新修改时间
+    int updateGmt_modified(int uid);
+
+    //根据时间和状态查询质量任务是否符合条件
+    boolean isStatusAndTime(int uid, Long startTime, Long endTime);
 }

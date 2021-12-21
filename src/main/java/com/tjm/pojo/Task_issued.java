@@ -1,5 +1,6 @@
 package com.tjm.pojo;
 
+import com.tjm.pojo.base.BaseItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

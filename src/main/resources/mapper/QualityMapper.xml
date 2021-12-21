@@ -12,8 +12,7 @@
         insert into
         "Quality"("uid","quality_id","software_name","software_version","software_category",
         "production_unit","software_desc","contact_person","contact_number","specification_model",
-        "software_arch","db_info",
-        "status","isGuideLine")
+        "software_arch","db_info","status","isGuideLine","gmt_created","gmt_modified")
         values(#{uid,jdbcType=NUMERIC},
         #{quality_id,jdbcType=NUMERIC},
         #{software_name,jdbcType=VARCHAR},
@@ -27,7 +26,10 @@
         #{software_arch,jdbcType=VARCHAR},
         #{db_info,jdbcType=VARCHAR},
         1,
-        #{isGuideLine,jdbcType=VARCHAR})
+        #{isGuideLine,jdbcType=VARCHAR},
+        #{gmt_created},
+        #{gmt_modified}
+        )
     </insert>
 
     <select id="queryQualityList" resultType="Quality">
@@ -63,6 +65,28 @@
       SELECT * from "Quality" where "status" = #{status} Order by "uid"
    </select>
 
+    <!--根据status和日期查询-->
+    <select id="findQualityByStatusAndTime" resultType="Quality">
+      SELECT * from "Quality" where "status" = #{status} and "gmt_modified" >= #{startTime} and "gmt_modified" &lt;= #{endTime}
+      Order by "uid"
+   </select>
+
+    <!--根据cate, model, status查询-->
+    <select id="findQualityByCateModelStatus" resultType="com.tjm.pojo.quality.Quality">
+        SELECT * from "Quality" where "status" = #{status} and "software_category" = #{software_category} and "model" = #{model}
+        Order by "uid"
+    </select>
+
+    <select id="findQualityByCate" resultType="com.tjm.pojo.quality.Quality">
+        SELECT * from "Quality" where "software_category" = #{software_category}
+        Order by "uid"
+    </select>
+
+    <select id="findQualityByModel" resultType="com.tjm.pojo.quality.Quality">
+        SELECT * from "Quality" where "model" = #{model}
+        Order by "uid"
+    </select>
+
     <!--根据id删除-->
     <delete id="deleteQualityById" parameterType="int">
       delete from "Quality" where "uid" = #{uid}
@@ -84,14 +108,11 @@
       "isGuideLine" = #{isGuideLine},
       "specification_url" = #{specification_url},
       "manual_url" = #{manual_url},
-      "code_file_url" = #{code_file_url}
+      "code_file_url" = #{code_file_url},
+      "gmt_modified" = #{gmt_modified}
       where "uid" = #{uid}
    </update>
 
-    <!--"require_doc_url" = #{require_doc_url},
-    "design_doc_url" = #{design_doc_url},
-    "coding_url" = #{coding_url},
-    "test_doc_url" = #{test_doc_url},-->
 
     <!--更新status-->
     <update id="updatesStatus" parameterType="Quality">
@@ -99,5 +120,25 @@
       where "uid" = #{uid}
    </update>
 
+    <!--    更新结果-->
+    <update id="updateFinalScore">
+      update "Quality" set "final_score" = #{final_score}
+      where "uid" = #{uid}
+    </update>
 
+    <update id="updateModel">
+        update "Quality" set "model" = #{model} where "uid" = #{uid}
+    </update>
+
+    <update id="updateGmt_modified">
+        update "Quality" set "gmt_modified" = #{gmt_modified} where "uid" = #{uid}
+    </update>
+
+    <select id="isStatusAndTime" resultType="java.lang.Boolean">
+        SELECT
+            count(1)
+        FROM
+            "Quality"
+        WHERE "uid" = #{uid}  and "gmt_modified" >= #{startTime} and "gmt_modified" &lt;= #{endTime}
+    </select>
 </mapper>

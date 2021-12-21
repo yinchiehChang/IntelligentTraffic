@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjm.mapper.PSTMQModelConfigMapper">
+
+    <insert id="insertModelConfig" parameterType="PSTMQModelConfig">
+        insert into
+        "PSTMQModelConfig"("uid","function_completeness","standard_compliance","demand_density","function_coverage","calculation_accuracy","precision","data_exchange","interface_consistency")
+        values(#{uid},
+        #{function_completeness,jdbcType=NUMERIC},
+        #{standard_compliance,jdbcType=NUMERIC},
+        #{demand_density,jdbcType=NUMERIC},
+        #{function_coverage,jdbcType=NUMERIC},
+        #{calculation_accuracy,jdbcType=NUMERIC},
+        #{precision,jdbcType=NUMERIC},
+        #{data_exchange,jdbcType=NUMERIC},
+        #{interface_consistency,jdbcType=NUMERIC})
+    </insert>
+
+    <!--根据id删除-->
+    <delete id="deleteById" parameterType="int">
+      delete from "PSTMQModelConfig" where "uid" = #{uid}
+   </delete>
+
+</mapper>

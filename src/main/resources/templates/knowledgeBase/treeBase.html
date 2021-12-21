@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/animate.min.css}" rel="stylesheet"/>
+    <link th:href="@{/ruoyi/css/ry-ui.css?v=4.6.2}" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/info-mgt.css" />
+    <link rel="stylesheet" href="css/layui.css" />
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style>
+        .tree_left{box-sizing:border-box;overflow-y: auto;width:19%;border: 1px #c1d3de solid;margin-right: 1%;border-top:none;}
+        .tree_left h6,.tree_right h6{line-height: 30px;font-weight: bold;padding-left: 6px ;color: #000;font-size: 14px}
+        .tree_left_top{margin: 6px}
+        .tree_input input{border: 1px #ccc solid;margin:3px 0 0 10px;border-radius: 4px;
+        }
+        .layui-layer-title{background:url(images/righttitlebig.png) repeat-x;font-weight:bold;color:#46647e; border:1px solid #c1d3de;height: 33px;line-height: 33px;}
+        .tabe_bot label{padding: 10px;text-align: right;font-size: 14px;font-weight: 900;color: #46647e}
+        .l_left{float: left}
+        .tabe_bot input,.tabe_bot  select{width: 180px;height: 30px;border-radius: 6px;margin:0 20px 0 0;border: none;border: 1px #ccc solid}
+        .tabe_btn{width: 60px;height: 30px;background-color: #68b86c;border: none;border-radius: 6px;color: #fff}
+
+        div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #99c9db;text-align: left;padding: 2px;z-index: 999}
+        div#rMenu ul li{ margin: 1px 0;padding: 5px 15px;cursor: pointer;list-style: none outside none;background-color: #5a8cc4;color: #fff  }
+        div#rMenu ul li:hover{color: #000;background-color: #ccc}
+        #rMenu ul{margin: 0;padding: 0};
+        .ztree_add_div {
+            width:200px;
+            height:100px;
+            border:1px solid #cccccc;
+            padding-top:10px;
+            padding-bottom:10px;
+            display:none;
+        }
+        .ztree_add_div p {
+
+            padding-bottom:10px;
+            padding-top:10px;
+        }
+        .bot_btn .btn{width: 40px;height: 24px;background-color: #68b86c;border: none;border-radius: 6px;color: #fff;margin-right: 15px;}
+        .bot_btn .btn1{background-color: #c1d3de;border: none;border-radius: 6px;color: #000;margin-right: 0}
+        .bot_btn{width: 100%;height: 30px;font-size:13px;text-align:center;}
+
+        .layui-tab-brief>.layui-tab-title .layui-this {
+            color: #2C91E6
+        }
+        .layui-tab-brief>.layui-tab-title .layui-this:after {
+            border-bottom: 2px solid #2C91E6;
+        }
+    </style>
+
+
+    <script src="js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-table.js"></script>
+    <script src="/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/layui.js"></script>
+    <script src="js/knowledgeBase.js"></script>
+    <script>
+        function change() {
+            var height01 = $(window).height();
+            $(".tree_left").css('height', height01 - 35+"px");
+        }
+    </script>
+    <title>知识库</title>
+</head>
+
+<body th:onload="'javascript:onLoad('+ ${bid} +', '+ ${bType} +')'">
+<div class="title"><h2 id="left_title"></h2></div>
+
+<div class="l_left" id="left_body" style="width: 100%">
+    <div class="query" id="query">
+
+    </div>
+
+    <div class="table-operate ue-clear" id="add">
+
+    </div>
+
+    <div id="KB-content"> </div>
+
+
+</div>
+
+<div class="pagination ue-clear"></div>
+
+<!--   -----------------------ItemAdd Modal-----------------------    -->
+<div class="modal fade" id="ItemAddModal" tabindex="-1" role="dialog" aria-labelledby="ItemAdd" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ItemAdd">新增检测项</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="security_level">安全级别</label>
+                        <form role="form">
+                            <div class="form-group">
+                                <select required id="security_level" class="form-control">
+                                    <option value="二级">二级</option>
+                                    <option value="三级">三级</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form-group">
+                        <label for="article_name">所属项目</label>
+                        <input type="text" id="article_name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="point_name">所属检测点</label>
+                        <input type="text" id="point_name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_nr">检测项内容</label>
+                        <textarea rows="3" cols="50" id="item_nr" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item_dx">测评对象</label>
+                        <input type="text" id="item_dx" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_ssbz">检测实施步骤</label>
+                        <textarea rows="5" cols="50" id="item_ssbz" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item_fxdj">风险等级</label>
+                        <input type="text" id="item_fxdj" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_sxh">顺序号</label>
+                        <input type="text" id="item_sxh" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="addItem()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------ItemUpdate Modal-----------------------    -->
+<div class="modal fade" id="ItemUpdateModal" tabindex="-1" role="dialog" aria-labelledby="ItemUpdate" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ItemUpdate">修改检测项</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="item_u_nr">检测项内容</label>
+                        <textarea rows="3" cols="50" id="item_u_nr" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item_u_dx">测评对象</label>
+                        <input type="text" id="item_u_dx" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_u_ssbz">检测实施步骤</label>
+                        <textarea rows="5" cols="50" id="item_u_ssbz" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item_u_fxdj">风险等级</label>
+                        <input type="text" id="item_u_fxdj" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_u_sxh">顺序号</label>
+                        <input type="text" id="item_u_sxh" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer" id="update-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------DeleteConfirm Modal-----------------------    -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirm">注意</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="delete-body">
+            </div>
+            <div class="modal-footer" id="delete-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------DeletePoint Modal-----------------------    -->
+<div class="modal fade" id="deletePointModal" tabindex="-1" role="dialog" aria-labelledby="deletePoint" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletePoint">注意</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                当前检测点下已经没有检测项，是否级联删除该检测点？
+            </div>
+            <div class="modal-footer" id="deletePoint-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------DeleteArticle Modal-----------------------    -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="deleteArticle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteArticle">注意</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                当前检测类下已经没有检测项，是否级联删除该检测类？
+            </div>
+            <div class="modal-footer" id="deleteArticle-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------IndicatorUpdate Modal-----------------------    -->
+<div class="modal fade" id="IndicatorUpdateModal" tabindex="-1" role="dialog" aria-labelledby="IndicatorUpdate" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="IndicatorUpdate">修改指标</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="item_u_dx">计算式分子</label>
+                        <input type="text" id="indicator_u_molecular" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_u_fxdj">计算式分母</label>
+                        <input type="text" id="indicator_u_denominator" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="item_u_sxh">指标描述</label>
+                        <input type="text" id="indicator_u_description" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer" id="indicator-update-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------IndicatorAdd Modal-----------------------    -->
+<div class="modal fade" id="IndicatorAddModal" tabindex="-1" role="dialog" aria-labelledby="IndicatorAdd" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="IndicatorAdd">新增质量模型指标</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="lv1">一级指标</label>
+                        <input type="text" id="lv1" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lv2">二级指标</label>
+                        <input type="text" id="lv2" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lv3">三级指标</label>
+                        <input type="text" id="lv3" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">三级指标描述</label>
+                        <textarea rows="3" cols="50" id="description" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="molecular">计算式分子</label>
+                        <input type="text" id="molecular" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="denominator">计算式分母</label>
+                        <input type="text" id="denominator" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="addIndicator()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------FunctionPointUpdate Modal-----------------------    -->
+<div class="modal fade" id="FunctionPointUpdateModal" tabindex="-1" role="dialog" aria-labelledby="FunctionPointUpdate" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="FunctionPointUpdate">修改功能点</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="functionPoint_u_serial">序列号</label>
+                        <input type="text" id="functionPoint_u_serial" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="functionPoint_u_description">功能点说明</label>
+                        <textarea rows="5" id="functionPoint_u_description" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                </form>
+                <div class="modal-footer" id="fPoint-update-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------FunctionPointAdd Modal-----------------------    -->
+<div class="modal fade" id="FunctionPointAddModal" tabindex="-1" role="dialog" aria-labelledby="FunctionPointAdd" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="FunctionPointAdd">新增功能点</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="lv1fPoint">一级功能点</label>
+                        <input type="text" id="lv1fPoint" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lv2fPoint">二级功能点</label>
+                        <input type="text" id="lv2fPoint" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lv3fPoint">三级功能点</label>
+                        <input type="text" id="lv3fPoint" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="fPointDescription">三级功能点描述</label>
+                        <textarea rows="3" cols="50" id="fPointDescription" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="serial">序列号</label>
+                        <input type="text" id="serial" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="addFunctionPoint()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------DeleteNodeConfirm Modal-----------------------    -->
+<div class="modal fade" id="deleteNodeConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteNodeConfirm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteNodeConfirm">注意</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="node-delete-body">
+            </div>
+            <div class="modal-footer" id="node-delete-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------CheckItemUpdate Modal-----------------------    -->
+<div class="modal fade" id="CheckItemUpdateModal" tabindex="-1" role="dialog" aria-labelledby="CheckItemUpdate" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CheckItemUpdate">修改检查项</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="checkItem_u_serial">检查项编号</label>
+                        <input type="text" id="checkItem_u_serial" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="checkItem_u_advice">检查意见</label>
+                        <textarea rows="5" id="checkItem_u_advice" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkItem_u_weight">权重</label>
+                        <input type="text" id="checkItem_u_weight" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer" id="cItem-update-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------FunctionPointAdd Modal-----------------------    -->
+<div class="modal fade" id="CheckItemAddModal" tabindex="-1" role="dialog" aria-labelledby="CheckItemAdd" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CheckItemAdd">新增检查项</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="lv1cItem">检查范围</label>
+                        <input type="text" id="lv1cItem" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lv2cItem">检查项名称</label>
+                        <input type="text" id="lv2cItem" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cItemAdvice">检查意见</label>
+                        <textarea rows="3" cols="50" id="cItemAdvice" wrap="hard" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cItemSerial">检查项编号</label>
+                        <input type="text" id="cItemSerial" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cItemWeight">权重</label>
+                        <input type="text" id="cItemWeight" class="form-control" />
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="addCheckItem()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+<script>
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+layui.use('element', function(){
+  var element = layui.element;
+
+  //…
+});
+</script>
+
+</html>

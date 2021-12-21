@@ -3,6 +3,10 @@ package com.tjm.controller;
 import com.aspose.words.Document;
 import com.aspose.words.SaveFormat;
 import com.tjm.pojo.*;
+import com.tjm.pojo.base.BaseNode;
+import com.tjm.pojo.quality.DateChoose;
+import com.tjm.pojo.testCase.FunctionPoint;
+import com.tjm.pojo.testCase.GuideLine;
 import com.tjm.pojo.testCase.TestCase;
 import com.tjm.pojo.testCase.Test_Procedure;
 import com.tjm.pojo.quality.Quality;
@@ -367,9 +371,6 @@ public class TestCaseController {
             List<Float> rates = new ArrayList<>();
             System.out.println(qualityIds);
             for(Integer qualityId:qualityIds){
-                //获得横坐标值，为对应的质量测试任务名
-//                String qualityName = qualityService.findQualityById(qualityId).getQuality_id().substring(8,16);
-//                names.add(qualityName);
                 //对应质量检测项目的测试用例总数
                 int caseNum = testCaseService.countCases(qualityId);
                 System.out.println(caseNum);
@@ -378,12 +379,6 @@ public class TestCaseController {
                 System.out.println(passNum);
                 DecimalFormat df = new DecimalFormat("0.####");
                 float oldrate = Float.parseFloat(df.format((float)passNum/caseNum));
-//                float ft = (float)passNum/caseNum;
-//                int   scale  =   4;//设置位数
-//                int   roundingMode  =  4;//表示四舍五入，可以选择其他舍值方式，例如去尾，等等.
-//                BigDecimal bd  =   new  BigDecimal((double)ft);
-//                bd = bd.setScale(scale, roundingMode);
-//                ft = bd.floatValue();
 
                 float rate = oldrate * 100;
                 System.out.println(rate);
@@ -402,6 +397,76 @@ public class TestCaseController {
             res.put("errormsg", errormsg);
             e.printStackTrace();
         }
+        return res;
+    }
+
+    /**
+     * 根据时间选择返回结果
+     * @param dateChoose
+     * @return
+     */
+    @RequestMapping("/caseResTrend")
+    @ResponseBody
+    public Map<String, Object> testResTrend(DateChoose dateChoose) {
+        Map<String, Object> res = new HashMap<>();
+
+        Date startDate = dateChoose.getStartDate();
+        Date endDate = dateChoose.getEndDate();
+        System.out.println("===================");
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+        res.put("sDate", startDate.getTime());
+        res.put("eDate", endDate.getTime());
+
+        try{
+            List<Integer> qualityIds = testCaseService.queryQualityIds();
+            List<String> names = new ArrayList<>();
+            //测试用例通过率
+            List<Float> rates = new ArrayList<>();
+            System.out.println(qualityIds);
+            for(Integer qualityId:qualityIds){
+                if(qualityService.isStatusAndTime(qualityId,startDate.getTime(),endDate.getTime())){
+                    //对应质量检测项目的测试用例总数
+                    int caseNum = testCaseService.countCases(qualityId);
+                    System.out.println(caseNum);
+                    //对应质量检测项目通过的测试用例总数
+                    int passNum = testCaseService.countPassCases(qualityId);
+                    System.out.println(passNum);
+                    DecimalFormat df = new DecimalFormat("0.####");
+                    float oldrate = Float.parseFloat(df.format((float)passNum/caseNum));
+
+                    float rate = oldrate * 100;
+                    System.out.println(rate);
+                    rates.add(rate);
+                }
+            }
+            System.out.println(names);
+            System.out.println(rates);
+            res.put("code", "1");
+//            res.put("names",names);
+            res.put("rates",rates);
+            //将质量评价任务id作为横坐标
+            res.put("qualityIds",qualityIds);
+        }catch (Exception e){
+            String errormsg = "获取数据失败，请检查数据库中是否存在数据！";
+            System.out.println(errormsg);
+            res.put("errormsg", errormsg);
+            e.printStackTrace();
+        }
+
+//        List<String> names = new ArrayList<>();
+//        List<Double> scores = new ArrayList<>();
+//        List<Quality> qualityList = qualityService.findQualityByStatusAndTime(7,
+//                startDate.getTime(), endDate.getTime());
+//        for (Quality quality : qualityList) {
+//            names.add(quality.getUid() + "#" + quality.getSoftware_name());
+//            scores.add(quality.getFinal_score());
+//        }
+//        map.put("nameList", names);
+//        map.put("scoreList", scores);
+
+
         return res;
     }
 

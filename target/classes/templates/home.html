@@ -1,205 +1,640 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" th:href="@{/css/base.css}" />
-<link rel="stylesheet" th:href="@{/css/home.css}" />
-    <!--<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">-->
-    <link th:href="@{/css/bootstrap-table.css}" rel="stylesheet" type="text/css">
-<title>首页</title>
-</head>
+    <head>
+        <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+        <script src="https://cdn.staticfile.org/echarts/5.2.1/echarts.min.js"></script>
+        <meta charset="utf-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/info-mgt.css"/>
+        <link rel="stylesheet" th:href="@{/css/base.css}"/>
+        <link rel="stylesheet" th:href="@{/css/home.css}"/>
 
-<body>
-<div class="article toolbar">
-	<div class="title ue-clear">
-    	<h2>常用功能</h2>
-        <!--<a href="javascript:;" class="more">更多</a>-->
-    </div>
-    <div class="content">
-    	<ul class="toollist ue-clear">
-    		<li>
-            	<a th:href="@{/templates/Points.html}" class="img" target="right"><img src="images/icon01.png" /></a>
-                <p><a th:href="@{/templates/Points.html}" target="right">日志查询</a></p>
-            </li>
-           
-            <li>
-            	<a href="dossier_aq.html" class="img" target="right"><img src="images/icon02.png" /></a>
-                <p><a href="dossier_aq.html" target="right">知识库</a></p>
-            </li>
-            
-            <li>
-            	<a href="leave.html" class="img"><img src="images/leave01.png" /></a>
-                <p><a href="leave.html">新建任务</a></p>
-            </li>
-           
-        
-            <li>
-                <a href="recode.html" class="img" target="right"><img src="images/icon07.png" /></a>
-                <p><a href="recode.html" target="right">模型配置</a></p>
-            </li>
-            <li>
-                <a href="dossier_my.html" class="img" target="right"><img src="images/myFiles.png" /></a>
-                <p><a href="dossier_my.html" target="right">xxx</a></p>
-            </li>
-			 <li>
-            	<a href="email.html" class="img" target="right"><img src="images/email03.png" /></a>
-                <p><a href="email.html" target="right">XXX</a></p>
-            </li>
-			 <li>
-            	<a href="file_sign.html" class="img" target="right"><img src="images/file02.png" /></a>
-                <p><a href="file_sign.html" target="right">xxx</a></p>
-            </li>
-            <li>
-            	<a href="document_wait.html" class="img" target="right"><img src="images/file03.png" /></a>
-                <p><a href="document_wait.html" target="right">xxx</a></p>
-            </li>
-			 <li>
-            	<a href="fcontract_sign.html" class="img" target="right"><img src="images/posintion01.png" /></a>
-                <p><a href="fcontract_sign.html" target="right">xxx</a></p>
-            </li>
-			<li>
-            	<a href="schedule.html" class="img" target="right"><img src="images/icon04.png" /></a>
-                <p><a href="schedule.html" target="right">xxx</a></p>
-            </li>
-            <li>
-            	<a href="javascript:;" class="img" target="right"><img src="images/datecion01.png"/></a>
-                <p><a href="javascript:;" onClick="openlayer()">xxx</a></p>
-            </li>
-            <li class="add-btn">
-            	<img src="images/add.png" />
-            </li>
-    	</ul>
-        
-    </div>
-</div>
-<div class="article half notice">
-	<div class="wrap-l">
-        <div class="title ue-clear">
-           <h2>软件质量评价结果展示</h2>
-            <a href="notice.html" class="more" target="right">更多</a>
-        </div>
-        <div class="content">
-        	
-        </div>
-    </div>
-</div>
-<div class="article half matter">
-	<div class="wrap-r">
-        <div class="title ue-clear">
-             <h2>软件安全检查结果展示</h2>
-            <a href="document_wait.html" class="more" target="right">更多</a>
-        </div>
-        <div class="content">
-        	
-        </div>
-    </div>
-</div>
-<div style="clear: both"></div>
-<div class="article half duty">
-	<div class="wrap-l">
-        <div class="title ue-clear">
-            <h2>我的任务</h2>
-            <a href="myrecode.html" class="more" target="right">更多</a>
-        </div>
-        <div class="content">
-            <table id="table" class="table_style"></table>
-        </div>
-    </div>
-</div>
-<div class="article half email">
-	<div class="wrap-r">
-        <div class="title ue-clear">
-            <h2>数据统计</h2>
-            <a href="email.html" class="more" target="right">更多</a>
-        </div>
-        <div class="content">
-        	
-        </div>
-    </div>
-</div>
-</body>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap-table.js"></script>
-<script src="js/bootstrap-table-zh-CN.min.js"></script>
-<script>
-    $(function () {
-        $('#table').bootstrapTable({
-            method: "get",
-            striped: true,
-            singleSelect: false,
-            url: "json/person.json",
-            dataType: "json",
-            pagination: true, //分页
-            pageSize: 10,
-            pageNumber: 1,
-            search: false, //显示搜索框
-            contentType: "application/x-www-form-urlencoded",
-            queryParams: null,
-            columns: [
-                {
-                    title: "任务名称",
-                    field: 'name',
-                    align: 'center',
-                    valign: 'middle'
-                },
-                {
-                    title: '完成日期',
-                    field: 'sex',
-                    align: 'center',
-                    valign: 'middle'
-                },
-                {
-                    title: '检测人员',
-                    field: 'type',
-                    align: 'center'
-                },
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/bootstrap-table.js"></script>
+        <script src="js/bootstrap-table-zh-CN.min.js"></script>
+        <title>首页</title>
+    </head>
 
-                {
-                    title: '备注',
-                    field: 'class',
-                    align: 'center'
-                },
-                {
-                    title: '操作',
-                    field: 'id',
-                    align: 'center',
-                    formatter: function (value, row) {
-                        var e = '<a  href="#" onclick="openlayer(\'' + row.id + '\')">查看</a> ';
-                        return e;
+    <body class="col-sm-12">
+        <div class="article toolbar">
+            <div class="title ue-clear">
+                <h2>常用功能</h2>
+                <!--<a href="javascript:;" class="more">更多</a>-->
+            </div>
+            <div class="content">
+                <ul class="toollist ue-clear">
+                    <li>
+                        <a th:href="@{/quality/AllQualities}" class="img" target="right"><img src="images/icon01.png"/></a>
+                        <p><a th:href="@{/quality/AllQualities}" target="right">新建任务</a></p>
+                    </li>
+
+                    <li>
+                        <a href="/material_audit.html" class="img" target="right"><img src="images/icon02.png"/></a>
+                        <p><a href="/material_audit.html" target="right">材料审核</a></p>
+                    </li>
+
+                    <li>
+                        <a href="/TestCases/qualities" class="img"><img src="images/leave01.png"/></a>
+                        <p><a href="/TestCases/qualities">功能测试</a></p>
+                    </li>
+
+                    <li>
+                        <a href="/dossier_my.html" class="img" target="right"><img src="images/myFiles.png"/></a>
+                        <p><a href="/dossier_my.html" target="right">软件质量知识库</a></p>
+                    </li>
+
+                    <li>
+                        <a href="/dossier_aq.html" class="img" target="right"><img src="images/myFiles.png"/></a>
+                        <p><a href="/dossier_aq.html" target="right">安全检查知识库</a></p>
+                    </li>
+
+                    <li>
+                        <a href="/users" class="img" target="right"><img src="images/icon07.png"/></a>
+                        <p><a href="/users" target="right">用户管理</a></p>
+                    </li>
+
+                    <li>
+                        <a href="/operlogs" class="img" target="right"><img src="images/posintion01.png"/></a>
+                        <p><a href="/operlogs" target="right">日志管理</a></p>
+                    </li>
+
+
+                    <!--<li>
+                        <a href="email.html" class="img" target="right"><img src="images/email03.png"/></a>
+                        <p><a href="email.html" target="right">XXX</a></p>
+                    </li>
+                    <li>
+                        <a href="file_sign.html" class="img" target="right"><img src="images/file02.png"/></a>
+                        <p><a href="file_sign.html" target="right">xxx</a></p>
+                    </li>
+                    <li>
+                        <a href="document_wait.html" class="img" target="right"><img src="images/file03.png"/></a>
+                        <p><a href="document_wait.html" target="right">xxx</a></p>
+                    </li>
+
+                    <li>
+                        <a href="schedule.html" class="img" target="right"><img src="images/icon04.png"/></a>
+                        <p><a href="schedule.html" target="right">xxx</a></p>
+                    </li>
+                    <li>
+                        <a href="javascript:;" class="img" target="right"><img src="images/datecion01.png"/></a>
+                        <p><a href="javascript:;" onClick="openlayer()">xxx</a></p>
+                    </li>
+                    <li class="add-btn">
+                        <img src="images/add.png"/>
+                    </li>-->
+                </ul>
+
+            </div>
+        </div>
+        <div class="article notice">
+            <div class="wrap">
+                <div class="title ue-clear">
+                    <h2>软件质量评价结果展示</h2>
+                    <a href="/qualityAnalyze/Analysis" class="more" target="right">更多</a>
+                </div>
+                <div class="article half matter">
+                    <div class="wrap-l">
+                        <div class="content"> <!--style="overflow:scroll;">-->
+                            <!--            <table id="table_quality" class="table_style"></table>-->
+                            <div id="model" style="height:400px;"></div>
+                            <script type="text/javascript">
+                                // 基于准备好的dom，初始化echarts实例
+                                var myChart = echarts.init(document.getElementById('model'));
+                                //设置option
+                                baroption = {
+                                    title: {
+                                        text: '质量模型柱状图',
+                                        left: 'center'
+                                    },
+                                    toolbox: {
+                                        show: true,
+                                        feature: {
+                                            mark: { show: true },
+                                            dataView: { show: true, readOnly: false },
+                                            restore: { show: true },
+                                            saveAsImage: { show: true }
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {
+                                            type: 'shadow'
+                                        }
+                                    },
+                                    legend: {
+                                        orient: 'vertical',
+                                        left: 'left'
+                                    },
+                                    xAxis: {
+                                        data: [],
+                                        axisLabel: {
+                                            interval:0,
+                                            rotate:20
+                                        }
+                                    },
+                                    yAxis: {},
+                                    series: [
+                                        {
+                                            name: '质量模型柱状图',
+                                            color: [],
+                                            type: 'bar',
+                                            data: [],
+                                            emphasis: {
+                                                itemStyle: {
+                                                    shadowBlur: 10,
+                                                    shadowOffsetX: 0,
+                                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                }
+                                            },
+                                            itemStyle: {
+                                                normal: {
+                                                    // 随机显示
+                                                    color: function (d) {
+                                                        return "#" + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16);
+                                                    },
+                                                    label: {
+                                                        show: true, //开启显示
+                                                        position: 'top', //在上方显示
+                                                        textStyle: { //数值样式
+                                                            color: 'black',
+                                                            fontSize: 16
+                                                        }
+                                                    }
+                                                },
+                                            }
+                                        }]
+                                }
+                                // 指定图表的配置项和数据
+                                myChart.setOption(baroption);
+                                //显示一段动画
+                                myChart.showLoading({
+                                    text: '数据正在等待加载中...',
+                                    textStyle: {fontSize: 30, color: '#444'},
+                                    effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
+                                });
+                                //异步请求数据
+                                $.ajax({
+                                    type: "post",
+                                    async: true,
+                                    url: "/qualityAnalyze/getData3",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        myChart.hideLoading();//隐藏加载动画
+                                        myChart.setOption({
+                                            xAxis: {
+                                                data: result.nameList
+                                            },
+                                            series: [{
+                                                data: result.numList
+                                            }]
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("异常！请重试！");
+                                    }
+                                });
+
+                            </script>
+                        </div>
+                    </div></div>
+                <div class="article half matter">
+                    <div class="wrap-r">
+                        <div class="content">
+                            <div id="cate" style="height:400px;"></div>
+                            <script type="text/javascript">
+                                // 基于准备好的dom，初始化echarts实例
+                                var myChart2 = echarts.init(document.getElementById('cate'));
+                                //设置option
+                                cateoption = {
+                                    title: {
+                                        text: '软件类别比例图',
+                                        left: 'center'
+                                    },
+                                    toolbox: {
+                                        show: true,
+                                        feature: {
+                                            mark: {show: true},
+                                            dataView: {show: true, readOnly: false},
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    tooltip: {
+                                        trigger: 'item'
+                                    },
+                                    legend: {
+                                        orient: 'vertical',
+                                        left: 'left'
+                                    },
+                                    series: [
+                                        {
+                                            name: '软件类别比例图',
+                                            type: 'pie',
+                                            radius: '50%',
+                                            data: [],
+                                            emphasis: {
+                                                itemStyle: {
+                                                    shadowBlur: 10,
+                                                    shadowOffsetX: 0,
+                                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                };
+                                // 指定图表的配置项和数据
+                                myChart2.setOption(cateoption);
+                                //显示一段动画
+                                myChart2.showLoading({
+                                    text: '数据正在等待加载中...',
+                                    textStyle: {fontSize: 30, color: '#444'},
+                                    effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
+                                });
+
+
+                                var brower = [];
+                                //异步请求数据
+                                $.ajax({
+                                    type: "post",
+                                    async: true,
+                                    url: "/qualityAnalyze/getData2",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        myChart2.hideLoading();//隐藏加载动画
+                                        // alert(result);
+                                        brower = [];
+                                        $.each(result.list, function (index, item) {
+                                            brower.push({
+                                                name: item.name,
+                                                value: item.value
+                                            });
+                                        });
+
+                                        myChart2.setOption({
+                                            series: [{
+                                                data: brower
+                                            }]
+                                        });
+                                    },
+                                    error: function () {
+                                        alert("异常！请重试！");
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div></div>
+            </div>
+        </div>
+        <div class="article matter">
+            <div class="wrap">
+                <div class="title ue-clear">
+                    <h2>软件安全检查结果展示</h2>
+                    <a href="document_wait.html" class="more" target="right">更多</a>
+                </div>
+                <div class="content">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>检查任务编号</th>
+                            <th>安全级别</th>
+                            <th>软件名称</th>
+                            <th>下发用户名</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="task_issued:${task_issueds}">
+                            <td th:text="${task_issued.getCheck_id()}"></td>
+                            <td th:text="${task_issued.getSecurity_level()}"></td>
+                            <td th:text="${task_issued.getSoftware_name()}"></td>
+                            <td th:text="${task_issued.getName()}"></td>
+                            </th:each>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="article half matter">
+            <div class="wrap-r">
+                <div class="title ue-clear">
+&lt;!&ndash;                    <h2>软件安全检查结果展示</h2>&ndash;&gt;
+&lt;!&ndash;                    <a href="document_wait.html" class="more" target="right">更多</a>&ndash;&gt;
+                </div>
+                <div class="content">
+
+                </div>
+            </div>
+        </div>-->
+
+        <!--        <div style="clear: both"></div>
+                <div class="article half notice">
+                    <div class="wrap-l">
+                        <div class="title ue-clear">
+                            <h2>软件安全检查结果展示</h2>
+                            <a href="/qualityOverView/OverViewPage" class="more" target="right">更多</a>
+                        </div>
+                        <div class="content"> &lt;!&ndash;style="overflow:scroll;">&ndash;&gt;
+                            &lt;!&ndash;            <table id="table_quality" class="table_style"></table>&ndash;&gt;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article half matter">
+
+                </div>-->
+        <!--<div style="clear: both"></div>
+        <div class="article half duty">
+            <div class="wrap-l">
+                <div class="title ue-clear">
+                    <h2>我的任务</h2>
+                    <a href="myrecode.html" class="more" target="right">更多</a>
+                </div>
+                <div class="content">
+                    <table id="table" class="table_style"></table>
+                </div>
+            </div>
+        </div>
+        <div class="article half email">
+            <div class="wrap-r">
+                <div class="title ue-clear">
+                    <h2>数据统计</h2>
+                    <a href="email.html" class="more" target="right">更多</a>
+                </div>
+                <div class="content">
+
+                </div>
+            </div>
+        </div>-->
+
+        <!--   -----------------------NewKB Modal-----------------------    -->
+        <div class="modal fade" id="NewKBModal" tabindex="-1" role="dialog" aria-labelledby="NewKB" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="NewKB">新增知识库</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="baseClass_name">知识库名称</label>
+                                <input type="text" id="baseClass_name" class="form-control"/>
+                            </div>
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" onclick="addBaseClass()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--   -----------------------BaseClassDelete Modal-----------------------    -->
+        <div class="modal fade" id="DeleteKBModal" tabindex="-1" role="dialog" aria-labelledby="KBDelete"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="BaseDelete">删除知识库</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body container" id="baseClass-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--   -----------------------DeleteConfirm Modal-----------------------    -->
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirm"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirm">注意</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="delete-body">
+                    </div>
+                    <div class="modal-footer" id="delete-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+<!--    <script>
+        $(function () {
+            $('#table_quality').bootstrapTable({
+                method: "post",
+                striped: true,
+                singleSelect: false,
+                url: "qualityOverView/homeOverView",
+                dataType: "json",
+                pagination: false, //分页
+                pageSize: 10,
+                pageNumber: 1,
+                search: false, //显示搜索框
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: null,
+                columns: [
+                    {
+                        title: '任务编号',
+                        field: 'quality_id',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '软件名称',
+                        field: 'software_name',
+                        align: 'center'
+                    },
+                    {
+                        title: '综合得分',
+                        field: 'final_score',
+                        align: 'center'
                     }
-                }
-            ]
-        });
-    })
-</script>
-<script type="text/javascript" th:src="@{/js/common.js}"></script>
-<script type="text/javascript">
-$(".title-list ul").on("click","li",function(){
-	var aIndex = $(this).index();
-	$(this).addClass("current").siblings().removeClass("current");
-	$(".matter-content").removeClass("current").eq(aIndex).addClass("current");
-});
+                ]
+            });
+        })
+    </script>
 
-$(".duty").find("tbody").find("tr:even").css("backgroundColor","#eff6fa");
-</script>
-<script th:src="@{/js/layer_v2.1/layer.js}"></script>
-<script type="text/javascript">
-    function openlayer(id){
-        layer.open({
-            type: 2,
-            title: '万年历',
-            shadeClose: true,
-            shade: 0.5,
-            skin: 'layui-layer-rim',
-//            maxmin: true,
-            closeBtn:2,
-            area: ['80%', '75%'],
-            shadeClose: true,
-            closeBtn: 2,
-            content: 'calendar.html'
-            //iframe的url
+    <script>
+        $(function () {
+            $('#table').bootstrapTable({
+                method: "get",
+                striped: true,
+                singleSelect: false,
+                url: "json/person.json",
+                dataType: "json",
+                pagination: true, //分页
+                pageSize: 10,
+                pageNumber: 1,
+                search: false, //显示搜索框
+                contentType: "application/x-www-form-urlencoded",
+                queryParams: null,
+                columns: [
+                    {
+                        title: "任务名称",
+                        field: 'name',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '完成日期',
+                        field: 'sex',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '检测人员',
+                        field: 'type',
+                        align: 'center'
+                    },
+
+                    {
+                        title: '备注',
+                        field: 'class',
+                        align: 'center'
+                    },
+                    {
+                        title: '操作',
+                        field: 'id',
+                        align: 'center',
+                        formatter: function (value, row) {
+                            var e = '<a  href="#" onclick="openlayer(\'' + row.id + '\')">查看</a> ';
+                            return e;
+                        }
+                    }
+                ]
+            });
+        })
+    </script>-->
+
+
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript">
+        $(".title-list ul").on("click", "li", function () {
+            var aIndex = $(this).index();
+            $(this).addClass("current").siblings().removeClass("current");
+            $(".matter-content").removeClass("current").eq(aIndex).addClass("current");
         });
-    }
-</script>
+
+        $(".duty").find("tbody").find("tr:even").css("backgroundColor", "#eff6fa");
+    </script>
+    <script th:src="@{/js/layer_v2.1/layer.js}"></script>
+    <script type="text/javascript">
+        function openlayer(id) {
+            layer.open({
+                type: 2,
+                title: '万年历',
+                shadeClose: true,
+                shade: 0.5,
+                skin: 'layui-layer-rim',
+//            maxmin: true,
+                closeBtn: 2,
+                area: ['80%', '75%'],
+                shadeClose: true,
+                closeBtn: 2,
+                content: 'calendar.html'
+                //iframe的url
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        function addBaseClass() {
+            var name = $('#baseClass_name').val();
+
+            $.ajax({
+                url: "/KBAddBaseClass",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({"name": name}),
+                success: function (res) {
+                    //清空文本框
+                    $("#baseClass_name").val("");
+
+                    if (res.result === 0) {
+                        //关闭对话框
+                        $("#NewKBModal").modal("hide");
+                        //刷新父级页面
+                        parent.location.reload();
+                    } else {
+                        alert('该知识库已存在！');
+                    }
+                },
+                error: function () {
+                    console.log('error!');
+                }
+            });
+        }
+
+        $('#DeleteKBModal').on('shown.bs.modal', showBaseList());
+
+        function showBaseList() {
+            $.ajax({
+                url: "/KBClassList",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json",
+                success: function (res) {//请求成功完成后要执行的方法
+                    res.baseClasses.forEach(function (baseClass) {
+                        $("#baseClass-list").append('<div class="row row-box">' +
+                        '<div class="col-sm-10">' +
+                        '<p style="text-align: center">' + baseClass.name + '</p>' +
+                        '</div>' +
+                        '<div class="col-sm-2">' +
+                        '<button type="button" class="btn btn-danger" onclick="deleteBaseClass(' + baseClass.class_num + ')">删除</button>' +
+                        '</div>' +
+                        '</div>');
+                    });
+                },
+                error: function () {
+                    console.log('error!');
+                }
+            });
+        }
+
+        function deleteBaseClass(id) {
+            bClassDeleteModal = $('#deleteConfirmModal');
+            bClassDeleteModal.modal('show');
+
+            bClassDeleteModal.on('shown.bs.modal', function () {
+                $('#delete-body').html('确认删除该项？');
+                $('#delete-footer').html(
+                '<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>' +
+                '<button type="button" class="btn btn-primary" onclick="baseClassDeleteConfirm(' + id + ')">确认</button>');
+                bClassDeleteModal.off('shown.bs.modal')
+            });
+        }
+
+        function baseClassDeleteConfirm(id) {
+            $.ajax({
+                url: "/KBBaseClassDelete",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({"class_num": id}),
+                success: function (res) {//请求成功完成后要执行的方法
+                    $('#deleteConfirmModal').modal('hide');
+                    parent.location.reload();
+                },
+                error: function () {
+                    console.log('error!');
+                }
+            });
+        }
+    </script>
 </html>

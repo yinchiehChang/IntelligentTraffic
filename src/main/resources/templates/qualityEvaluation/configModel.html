@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <div th:include="/qualityEvaluation/common-quality :: commonheader"></div>
+        <title>配置模型</title>
+
+    </head>
+
+    <body class="col-sm-12">
+
+        <span th:text="${uid}"></span>
+
+        <div class="row">
+            <!--<div class="col-sm-3">
+                <select name="model_name" class="form-control" type="text" maxlength="30"
+                        onchange="window.location=this.value;">
+                    &lt;!&ndash;onchange="window.open(this.options[this.selectedIndex].value)&ndash;&gt;
+                    <option th:value="${uid}">McCall软件质量模型</option>
+                    <option th:value="${uid}">Boehm软件质量模型</option>
+                    <option th:value="${uid}">ISO软件质量模型</option>
+                    <option th:value="${uid}" selected>公安交管软件质量模型</option>
+                </select>
+            </div>
+            <div class="col-sm-6"></div>-->
+        </div>
+
+        <form id="form-user-add" class="form-horizontal" action="/qualityModel/modelConf" method="post">
+            <tr class="table-responsive" th:each="level1:${QualityModel.getFirstIndicator()}">
+                <h4 class="form-header h4" th:text="${level1.getIndicatorName()}"></h4>
+                <table class="table table-striped table-sm">
+                    <div th:each="level2:${level1.getSubIndicator()}">
+                        <thead>
+                        <tr>
+                            <th class="col-sm-3">
+                                <!--<label>
+                                    <input type="checkbox" name="feature">
+                                </label>-->
+                                <span th:text="${level2.getIndicatorName()}"></span>
+                            </th>
+                            <th class="col-sm-7">
+                                <span th:text="${level2.getIndicatorDescription()}"></span>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="level3:${level2.getSubIndicator()}">
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="name[]" th:text="${level3.getIndicatorName()}"
+                                           th:value="${level3.getIndicatorName()}" checked="checked">
+                                </label>
+                                <!--th:name="${level3.getIndexName()}"-->
+                                <!--<span th:text="${level3.getIndicatorName()}"></span>-->
+                            </td>
+                            <td>
+                                <span th:text="${level3.getIndicatorDescription()}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </div>
+                </table>
+            </tr>
+
+            <div class="row">
+                <div class="col-sm-1">
+                    <input type="submit" class="tabe_btn" value="提交">
+                </div>
+            </div>
+        </form>
+
+        <span th:text="${getQualityModel}"></span>
+
+
+    </body>
+
+    <div th:replace="/qualityEvaluation/common-quality :: #commonScript"></div>
+
+
+</html>

@@ -3,7 +3,7 @@ spring:
     username: 'tjm'
     password: '123'
     # 假如时区报错，加入一个时区配置serverTimezone
-    url: jdbc:oracle:thin:@localhost:1521:XE
+    url: jdbc:oracle:thin:@localhost:1521:orcl
     driver-class-name: oracle.jdbc.driver.OracleDriver
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -31,3 +31,38 @@ spring:
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
+  #Spring Boot Admin可视化
+  boot:
+    admin:
+      client:
+        url: http://localhost:8888
+        instance:
+          prefer-ip: true  #使用ip注册进来
+    application:
+      name: Intelligent_traffic
+
+# management 是所有actuator的配置
+# management.endpoint.端点名.xxxx  对某个端点的具体配置
+management:
+  endpoints:
+    enabled-by-default: true  #默认开启所有监控端点  true
+    web:
+      exposure:
+        include: '*' # 以web方式暴露所有端点
+
+  endpoint: #对某个端点的具体配置
+    health:
+      show-details: always
+      enabled: true
+    info:
+      enabled: true
+    beans:
+      enabled: true
+    metrics:
+      enabled: true
+
+info:
+  appName: 公安交通管理软件质量及安全合规性检验管理系统
+  appVersion: 1.0.0
+  mavenProjectName: springboot-03-web
+  mavenProjectVersion: 0.0.1-SNAPSHOT

@@ -34,18 +34,15 @@ public class Quality implements Serializable {
     String software_arch;
     //数据库信息
     String db_info;
-    //软件需求分析文档地址
-    String require_doc_url;
-    //软件设计文档地址
-    String design_doc_url;
-    //软件编码地址
-    String coding_url;
-    //软件测试文档地址
-    String test_doc_url;
     //状态
     Integer status;
 
-    //是否参考“公安交通集成指挥平台通用技术条件”
+    //得分
+    double final_score;
+    //模型
+    String model;
+
+    //测试用例参考标准
     String isGuideLine;
     //软件需求规格说明地址
     String specification_url;
@@ -53,6 +50,34 @@ public class Quality implements Serializable {
     String manual_url;
     //代码文件地址
     String code_file_url;
+
+    //创建时间
+    Long gmt_created;
+    //修改时间
+    Long gmt_modified;
+
+    public Quality(Integer uid, String quality_id, String software_name, String software_version,
+                   String software_category, String production_unit, String software_desc, String contact_person,
+                   String contact_number, String specification_model, String software_arch, String db_info,
+                   Integer status, String isGuideLine, String specification_url, String manual_url, String code_file_url) {
+        this.uid = uid;
+        this.quality_id = quality_id;
+        this.software_name = software_name;
+        this.software_version = software_version;
+        this.software_category = software_category;
+        this.production_unit = production_unit;
+        this.software_desc = software_desc;
+        this.contact_person = contact_person;
+        this.contact_number = contact_number;
+        this.specification_model = specification_model;
+        this.software_arch = software_arch;
+        this.db_info = db_info;
+        this.status = status;
+        this.isGuideLine = isGuideLine;
+        this.specification_url = specification_url;
+        this.manual_url = manual_url;
+        this.code_file_url = code_file_url;
+    }
 
 
 }
