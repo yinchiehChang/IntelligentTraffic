@@ -10,4 +10,16 @@
         values(#{uid},#{filename},#{uri},#{type})
     </insert>
 
+    <select id="queryFileByPath" parameterType="String" resultType="Attachement">
+        SELECT * FROM "Attachement" WHERE "uri" LIKE #{path}
+    </select>
+
+    <select id="queryFileByUid" parameterType="String" resultType="Attachement">
+        SELECT * FROM "Attachement" WHERE "uid" = #{uid}
+    </select>
+
+    <delete id="deleteFileByUid" parameterType="String">
+        DELETE FROM "TJM"."Attachement" WHERE "uid" = #{uid}
+    </delete>
+
 </mapper>

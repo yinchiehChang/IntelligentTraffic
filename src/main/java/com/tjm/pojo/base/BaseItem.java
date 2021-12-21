@@ -13,7 +13,6 @@ public class BaseItem {
     private String point_name;
     private String article_name;
     private String base_name;
-//    private String security_level;
     private String nr;
     private String dx;
     private String aqjb;

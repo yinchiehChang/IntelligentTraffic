@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>个人档案</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/info-mgt.css"/>
+    <link rel="stylesheet" href="css/base.css"/>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/fileinput.css}" rel="stylesheet">
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-table.js"></script>
+    <script src="/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="/js/knowledgeBase.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-table.js"></script>
+    <script src="/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/js/fileinput.js"></script>
+    <script src="/js/zh.js"></script>
+    <script src="/js/xlsx.full.min.js"></script>
+    <style>
+        *{margin: 0;padding: 0}
+        .l_left{float: left}
+        .clear{clear: both}
+        a{text-decoration: none}
+        .title{  background:url(images/righttitlebig.png) repeat-x; border:1px solid #c1d3de; overflow:visible;}
+        .title h2{line-height:33px; margin-left:7px; padding-left:22px; font-weight:bold; font-size:14px; font-family:'宋体'; color:#000000; background:url(images/titleico.png) no-repeat left center;}
+        .resource{border: 1px #c1d3de solid;border-top: none}
+        .resource_main_top .resource_box{width: 10%;height: 130px;margin:0 1%;box-sizing: border-box}
+        .resource_box a{display: block;width: 100%;height: 100%;cursor: pointer;border: 2px #ccc solid;box-shadow: 4px 4px 5px rgba(182,185,187,0.6)}
+        .resource_box a:hover{color:#c1d3de;border: 2px #c1d3de solid ;box-shadow: 4px 4px 5px rgba(193,211,222,0.8)}
+        .resource_main_top{padding: 20px 0}
+        .img_div{
+            width: 100%;
+
+        }
+        .img_div img{
+            width: 100%;
+            height: 100px;
+
+        }
+        .img_p{
+            /*width: 100%;*/
+            text-align: center;
+        }
+        .img_p ul{list-style: none;text-align: center}
+        .img_p ul li{display:inline-block;padding-left: 5px;
+            padding-right: 5px;
+        }
+        .row-box{
+            padding: 10px;
+            margin: 5px;
+            border-radius: 15px;
+            background-color: #FCFCFC;
+        }
+    </style>
+</head>
+<body onLoad="change()" onResize="change()">
+<div class="title">
+    <h2 th:text="${baseClass.getName()}"></h2>
+</div>
+<div class="l_left" id="left_body" style="width: 100%">
+    <div class="table-operate ue-clear">
+        <a data-toggle="modal" data-target="#BaseAddModal" class="add"><pre>  添加</pre></a>
+        <a data-toggle="modal" data-target="#FileUploadModal" class="add"><pre>  导入</pre></a>
+        <a data-toggle="modal" data-target="#BaseDeleteModal" class="del"><pre>  删除</pre></a>
+
+    </div>
+    <div class="resource">
+        <div class="resource_main">
+            <div class="resource_main_top">
+                <div class="l_left resource_box" th:each="base:${bases}">
+                    <a th:href="'/knowledgeBase?bid=' + ${base.getBase_id()}" target="right">
+                        <div class="img_div">
+                            <img src="images/myflie.png"/>
+                        </div>
+                        <p style="text-align: center;font-weight: bold" th:text="${base.getBase_name()}"></p>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------BaseAdd Modal-----------------------    -->
+<div class="modal fade" id="BaseAddModal" tabindex="-1" role="dialog" aria-labelledby="BaseAdd" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BaseAdd" th:text="'新增' + ${baseClass.getName()}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="base_name">知识库名称</label>
+                        <input type="text" id="base_name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="base_type">知识库类型</label>
+                        <select required id="base_type" class="form-control">
+                            <option value="0">树形结构</option>
+                            <option value="1">文件</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" th:onclick="'javascript:addBase('+ ${baseClass.getClass_num()} +')'">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------BaseDelete Modal-----------------------    -->
+<div class="modal fade" id="BaseDeleteModal" tabindex="-1" role="dialog" aria-labelledby="BaseDelete" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BaseDelete" th:text="'删除' + ${baseClass.getName()}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container" id="base-list">
+                <div class="row row-box" th:each="base:${bases}">
+                    <div class="col-sm-10">
+                        <p style="text-align: center" th:text="${base.getBase_name()}"></p>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-danger" th:onclick="'javascript:deleteBase('+ ${base.getBase_id()} +')'">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------BaseDeleteConfirm Modal-----------------------    -->
+<div class="modal fade" id="BaseDeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="BaseDeleteConfirm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BaseDeleteConfirm">注意</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>您确定要删除该知识库吗？</p>
+                <p style="color: red">该知识库下的所有内容将会一并删除</p>
+            </div>
+            <div class="modal-footer" id="deleteBase-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--   -----------------------FileUpload Modal-----------------------    -->
+<div class="modal fade bd-example-modal-lg" id="FileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUpload" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileUpload">上传知识库文件</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="from-group">
+                    <input type="file" id="fileUploader" name="fileUploader" accept=".xls, .xlsx" class="form-control"/>
+                </div>
+                <div class="from-group">
+                    <label for="base_type">知识库标准类型</label>
+                    <select required id="info_table" class="form-control">
+                        <option value="CHECK_ITEM">软件质量-检查项</option>
+                        <option value="ITEM">安全检查-检测项</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function change() {
+        var height = $(document).height();
+        $(".resource").css("height", height - 36 + "px");
+    }
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+$(document).ready(function(){
+    $("#fileUploader").change(function(evt){
+            var selectedFile = evt.target.files[0];
+            var reader = new FileReader();
+            var file_name = document.getElementById("fileUploader").files[0].name;
+            insertBase(file_name, $('#info_table').val());
+            reader.onload = function(event) {
+                var data = event.target.result;
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                workbook.SheetNames.forEach(function(sheetName) {
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    sentJSONToServer(XL_row_object, $('#info_table').val(), file_name, sheetName);
+                })
+
+                $('#FileUploadModal').modal('hide');
+                $('.modal-backdrop').remove();
+            };
+            reader.onerror = function(event) {
+            console.error("File could not be read! Code " + event.target.error.code);
+        };
+        // 读取上传文件为二进制
+        reader.readAsBinaryString(selectedFile);
+    });
+});
+</script>
+</html>

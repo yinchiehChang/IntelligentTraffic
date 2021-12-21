@@ -2,122 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.tjm.mapper.BaseMapper">
-
-    <resultMap type="Issued_item" id="Issued_itemResult">
-        <id property="item_id" column="item_id"/>
-        <result property="point_name" column="point_name"/>
-        <result property="aqjb" column="aqjb"/>
-        <result property="nr" column="nr"/>
-        <result property="dx" column="dx"/>
-        <result property="ssbz" column="ssbz"/>
-        <result property="fxdj" column="fxdj"/>
-        <result property="sxh" column="sxh"/>
-        <result property="zt" column="zt"/>
-    </resultMap>
-
-    <select id="findSecutiryLevelByPointid" parameterType="int" resultType="String">
-        SELECT SECURITY.security_level FROM SECURITY WHERE Security_id IN (SELECT Security_id FROM ARTICLE WHERE article_id IN (SELECT article_id FROM POINT WHERE point_id= #{id}))
-    </select>
-
-    <select id="addPointName" parameterType="int" resultMap="Issued_itemResult">
-        SELECT item_id,p.point_id,point_name,aqjb,nr,dx,ssbz,fxdj,sxh,i.zt from ITEM i,POINT p WHERE i.POINT_ID=p.POINT_ID AND i.POINT_ID = #{id}
-    </select>
-
-    <select id="queryByPointId" parameterType="int" resultType="String">
-        SELECT point_name from POINT where point_id = #{id}
-    </select>
-
-    <!--BaseNode-->
-    <select id="queryNodeLv1ByBaseName" parameterType="String" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV1" WHERE "SUPER_ID" IN
-                                                       (SELECT "BASE_ID" AS "SUPER_ID" FROM "BASE" WHERE "BASE_NAME"=#{baseName})
-        ORDER BY "NODE_ID"
-    </select>
-
-    <select id="queryNodeLv2BySuperId" parameterType="Integer" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "SUPER_ID"=#{superId}
-        ORDER BY "NODE_ID"
-    </select>
-
-    <select id="queryNodeLv3BySuperId" parameterType="Integer" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV3" WHERE "SUPER_ID"=#{superId}
-        ORDER BY "NODE_ID"
-    </select>
-
-    <select id="queryNodeLv3ByInput" parameterType="String" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV3" WHERE "NODE_NAME" LIKE #{lv3} AND "SUPER_ID" IN
-                                                                                   (SELECT "NODE_ID" FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "NODE_NAME" LIKE #{lv2} AND "SUPER_ID" IN
-                                                                                                                                                                       (SELECT "NODE_ID" FROM "TJM"."TREE_BASE_NODE_LV1" WHERE NODE_NAME LIKE #{lv1})
-                                                                                   )
-        ORDER BY "NODE_ID"
-    </select>
-
-    <select id="queryNodeLv2ByInput" parameterType="String" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "NODE_NAME" LIKE #{lv2} AND "LEAF"=1 AND "SUPER_ID" IN
-                                                                                                (SELECT "NODE_ID" FROM "TJM"."TREE_BASE_NODE_LV1" WHERE NODE_NAME LIKE #{lv1})
-        ORDER BY "NODE_ID"
-    </select>
-
-    <select id="findSuperNodeByLv3" parameterType="Integer" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "NODE_ID"=#{superId}
-    </select>
-
-    <select id="findSuperNodeByLv2" parameterType="Integer" resultType="BaseNode">
-        SELECT * FROM "TJM"."TREE_BASE_NODE_LV1" WHERE "NODE_ID"=#{superId}
-    </select>
-
-    <select id="queryNodeWithSameSuperId" resultType="BaseNode">
-        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "SUPER_ID"=#{superId}
-    </select>
-
-    <select id="queryNodeByInfo" resultType="BaseNode">
-        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "INFO_TABLE"=#{infoTable} AND "INFO_ID"=#{infoId}
-    </select>
-
-    <select id="queryNodeById" resultType="BaseNode">
-        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "NODE_ID"=#{nodeId}
-    </select>
-
-    <select id="findNodeByNameAndSuperId" resultType="BaseNode">
-        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "NODE_NAME" LIKE #{nodeName} AND "SUPER_ID"=#{superId}
-    </select>
-
-    <insert id="insertNode">
-        INSERT INTO "TJM".TREE_BASE_NODE_LV${level} ("SUPER_ID", "NODE_NAME", "LEAF", "DESCRIPTION", "INFO_TABLE", "INFO_ID") VALUES (#{superId}, #{nodeName}, #{leaf}, #{description}, #{infoTable}, #{infoId})
-    </insert>
-
-    <delete id="deleteNodeById">
-        DELETE FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "NODE_ID"=#{nodeId}
-    </delete>
-
-    <!--BugLibrary-->
-    <select id="queryBugLibByBaseName" parameterType="String" resultType="BugLib">
-        SELECT * FROM "TJM"."BUG_LIB" WHERE "BASE_ID" IN
-                                            (SELECT BASE_ID FROM "TJM"."BASE" WHERE "BASE_NAME" LIKE #{baseName})
-        ORDER BY "BID"
-    </select>
-
-    <select id="queryBugLibById" parameterType="Integer" resultType="BugLib">
-        SELECT * FROM "TJM"."BUG_LIB" WHERE "BID" = #{bid}
-        ORDER BY "BID"
-    </select>
-
-    <update id="updateBugLib" parameterType="BugLib">
-        UPDATE "TJM"."BUG_LIB"
-        SET "PORT"=#{port}, "TYPE"=#{type}, "LEVEL"=#{level}, "CVE_NUM"=#{cve_num}, "BUGTRAQ"=#{bugtraq}, "NAME"=#{name}, "CVSS"=#{cvss}, "INFORMATION"=#{information}, "DESCRIPTION"=#{description}, "SOLUTION"=#{solution}
-        WHERE "BID"=#{bid}
-    </update>
-
-    <insert id="insertBugLib" parameterType="BugLib">
-        INSERT INTO "TJM"."BUG_LIB" ("BID", "PORT", "TYPE", "LEVEL", "CVE_NUM", "BUGTRAQ", "NAME", "INFORMATION", "DESCRIPTION", "SOLUTION", "BASE_ID", "CVSS")
-        VALUES (#{bid}, #{port}, #{type}, #{level}, #{cve_num}, #{bugtraq}, #{name}, #{information}, #{description}, #{solution}, #{base_id}, #{cvss})
-    </insert>
-
-    <delete id="deleteBugLibById" parameterType="Integer">
-        DELETE FROM "TJM"."BUG_LIB" WHERE "BID"=#{bid}
-    </delete>
 
 
     <!--Base-->
@@ -149,9 +34,9 @@
 
     <select id="queryFunctionPointBase" resultType="Base">
         SELECT * FROM "TJM"."BASE" WHERE BASE_ID IN (SELECT SUPER_ID FROM "TJM"."TREE_BASE_NODE_LV1" WHERE NODE_ID IN
-                                                                                                           (SELECT SUPER_ID FROM "TJM"."TREE_BASE_NODE_LV2" WHERE NODE_ID IN
-                                                                                                                                                                  (SELECT SUPER_ID FROM "TJM"."TREE_BASE_NODE_LV3" WHERE INFO_TABLE='FUNCTION_POINT')
-                                                                                                           )
+        (SELECT SUPER_ID FROM "TJM"."TREE_BASE_NODE_LV2" WHERE NODE_ID IN
+        (SELECT SUPER_ID FROM "TJM"."TREE_BASE_NODE_LV3" WHERE INFO_TABLE='FUNCTION_POINT')
+        )
         )
     </select>
 
@@ -191,10 +76,10 @@
     </select>
 
     <insert id="insertSecurity" parameterType="BaseSecurity">
-        <selectKey keyProperty="security_id" resultType="Integer" order="BEFORE">
-            select SECURITYid_sequence.NEXTVAL from dual
+        <selectKey keyProperty="security_id" resultType="Integer" order="AFTER">
+            select SECURITYid_sequence.CURRVAL from dual
         </selectKey>
-        INSERT INTO "TJM"."SECURITY" ("BASE_ID", "SECURITY_LEVEL") VALUE (#{base_id}, #{security_level})
+        INSERT INTO "TJM"."SECURITY" ("BASE_ID", "SECURITY_LEVEL") VALUES (#{base_id}, #{security_level})
     </insert>
 
     <!--Article-->
@@ -252,7 +137,7 @@
     <select id="queryPointByBaseId" resultType="BasePoint" parameterType="Integer">
         SELECT * FROM "POINT"
         WHERE "ARTICLE_ID" IN (SELECT "ARTICLE_ID" FROM "ARTICLE" WHERE "SECURITY_ID" IN
-                                                                        (SELECT "SECURITY_ID" FROM "SECURITY" WHERE "BASE_ID"=#{baseId})
+        (SELECT "SECURITY_ID" FROM "SECURITY" WHERE "BASE_ID"=#{baseId})
         )
         Order by "POINT_ID"
     </select>
@@ -295,22 +180,22 @@
     <select id="queryItemByBaseId" resultType="BaseItem" parameterType="Integer">
         SELECT * FROM "ITEM"
         WHERE POINT_ID IN
-              (SELECT POINT_ID FROM "POINT" WHERE ARTICLE_ID IN
-                                                  (SELECT ARTICLE_ID FROM "ARTICLE" WHERE "SECURITY_ID" IN
-                                                                                          (SELECT "SECURITY_ID" FROM "SECURITY" WHERE "BASE_ID"=#{baseId})
-                                                  )
-              )
+        (SELECT POINT_ID FROM "POINT" WHERE ARTICLE_ID IN
+        (SELECT ARTICLE_ID FROM "ARTICLE" WHERE "SECURITY_ID" IN
+        (SELECT "SECURITY_ID" FROM "SECURITY" WHERE "BASE_ID"=#{baseId})
+        )
+        )
         Order by "ITEM_ID"
     </select>
 
     <select id="queryItemByInput" resultType="BaseItem">
         SELECT * FROM "ITEM"
         WHERE POINT_ID IN
-              (SELECT POINT_ID FROM "POINT" WHERE ARTICLE_ID IN
-                                                  (SELECT ARTICLE_ID FROM "ARTICLE" WHERE "SECURITY_ID" IN
-                                                                                          (SELECT "SECURITY_ID" FROM "SECURITY" WHERE "SECURITY_LEVEL" LIKE #{aqjb})
-                                                  )
-              ) AND DX LIKE #{dx} AND NR LIKE #{nr}
+        (SELECT POINT_ID FROM "POINT" WHERE ARTICLE_ID IN
+        (SELECT ARTICLE_ID FROM "ARTICLE" WHERE "SECURITY_ID" IN
+        (SELECT "SECURITY_ID" FROM "SECURITY" WHERE "SECURITY_LEVEL" LIKE #{aqjb})
+        )
+        ) AND DX LIKE #{dx} AND NR LIKE #{nr}
         Order by "ITEM_ID"
     </select>
 
@@ -318,8 +203,7 @@
         <selectKey keyProperty="item_id" resultType="Integer" order="AFTER">
             select ITEMid_sequence.CURRVAL from dual
         </selectKey>
-        INSERT INTO "TJM"."ITEM" ("POINT_ID", "NR", "DX", "SSBZ", "FXDJ", "SXH") VALUES (#{point_id}, #{nr}, #{dx},
-        #{ssbz}, #{fxdj}, #{sxh})
+        INSERT INTO "TJM"."ITEM" ("POINT_ID", "NR", "DX", "SSBZ", "FXDJ", "SXH") VALUES (#{point_id}, #{nr}, #{dx}, #{ssbz}, #{fxdj}, #{sxh})
     </insert>
 
     <update id="updateItem" parameterType="BaseItem">
@@ -348,7 +232,7 @@
 
     <select id="query1stIndicatorByBaseName" parameterType="String" resultMap="indicatorToNodeMap">
         SELECT * FROM "TJM"."TREE_BASE_NODE_LV1" WHERE "SUPER_ID" IN
-                                                       (SELECT "BASE_ID" AS "SUPER_ID" FROM "BASE" WHERE "BASE_NAME"=#{baseName})
+        (SELECT "BASE_ID" AS "SUPER_ID" FROM "BASE" WHERE "BASE_NAME"=#{baseName})
         ORDER BY "NODE_ID"
     </select>
 
@@ -377,8 +261,7 @@
         <selectKey keyProperty="indicatorId" resultType="Integer" order="AFTER">
             select INDICATORid_sequence.CURRVAL from dual
         </selectKey>
-        INSERT INTO "TJM"."INDICATOR" ("DESCRIPTION", "NUMERATOR", "DENOMINATOR") VALUES (#{indicatorDescription},
-        #{molecular}, #{denominator})
+        INSERT INTO "TJM"."INDICATOR" ("DESCRIPTION", "NUMERATOR", "DENOMINATOR") VALUES (#{indicatorDescription}, #{molecular}, #{denominator})
     </insert>
 
     <delete id="deleteIndicatorById" parameterType="Integer">
@@ -429,5 +312,95 @@
 
     <delete id="deleteCheckItemById" parameterType="Integer">
         DELETE FROM "TJM"."CHECK_ITEM" WHERE "CID"=#{cid}
+    </delete>
+
+    <!--BaseNode-->
+    <select id="queryNodeLv1ByBaseName" parameterType="String" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV1" WHERE "SUPER_ID" IN
+        (SELECT "BASE_ID" AS "SUPER_ID" FROM "BASE" WHERE "BASE_NAME"=#{baseName})
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="queryNodeLv2BySuperId" parameterType="Integer" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "SUPER_ID"=#{superId}
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="queryNodeLv3BySuperId" parameterType="Integer" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV3" WHERE "SUPER_ID"=#{superId}
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="queryNodeLv3ByInput" parameterType="String" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV3" WHERE "NODE_NAME" LIKE #{lv3} AND "SUPER_ID" IN
+        (SELECT "NODE_ID" FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "NODE_NAME" LIKE #{lv2} AND "SUPER_ID" IN
+        (SELECT "NODE_ID" FROM "TJM"."TREE_BASE_NODE_LV1" WHERE NODE_NAME LIKE #{lv1})
+        )
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="queryNodeLv2ByInput" parameterType="String" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "NODE_NAME" LIKE #{lv2} AND "LEAF"=1 AND "SUPER_ID" IN
+        (SELECT "NODE_ID" FROM "TJM"."TREE_BASE_NODE_LV1" WHERE NODE_NAME LIKE #{lv1})
+        ORDER BY "NODE_ID"
+    </select>
+
+    <select id="findSuperNodeByLv3" parameterType="Integer" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV2" WHERE "NODE_ID"=#{superId}
+    </select>
+
+    <select id="findSuperNodeByLv2" parameterType="Integer" resultType="BaseNode">
+        SELECT * FROM "TJM"."TREE_BASE_NODE_LV1" WHERE "NODE_ID"=#{superId}
+    </select>
+
+    <select id="queryNodeWithSameSuperId" resultType="BaseNode">
+        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "SUPER_ID"=#{superId}
+    </select>
+
+    <select id="queryNodeByInfo" resultType="BaseNode">
+        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "INFO_TABLE"=#{infoTable} AND "INFO_ID"=#{infoId}
+    </select>
+
+    <select id="queryNodeById" resultType="BaseNode">
+        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "NODE_ID"=#{nodeId}
+    </select>
+
+    <select id="findNodeByNameAndSuperId" resultType="BaseNode">
+        SELECT * FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "NODE_NAME" LIKE #{nodeName} AND "SUPER_ID"=#{superId}
+    </select>
+
+    <insert id="insertNode">
+        INSERT INTO "TJM".TREE_BASE_NODE_LV${level} ("SUPER_ID", "NODE_NAME", "LEAF", "DESCRIPTION", "INFO_TABLE", "INFO_ID") VALUES (#{superId}, #{nodeName}, #{leaf}, #{description}, #{infoTable}, #{infoId})
+    </insert>
+
+    <delete id="deleteNodeById">
+        DELETE FROM "TJM".TREE_BASE_NODE_LV${level} WHERE "NODE_ID"=#{nodeId}
+    </delete>
+
+    <!--BugLibrary-->
+    <select id="queryBugLibByBaseName" parameterType="String" resultType="BugLib">
+        SELECT * FROM "TJM"."BUG_LIB" WHERE "BASE_ID" IN
+        (SELECT BASE_ID FROM "TJM"."BASE" WHERE "BASE_NAME" LIKE #{baseName})
+        ORDER BY "BID"
+    </select>
+
+    <select id="queryBugLibById" parameterType="Integer" resultType="BugLib">
+        SELECT * FROM "TJM"."BUG_LIB" WHERE "BID" = #{bid}
+        ORDER BY "BID"
+    </select>
+
+    <update id="updateBugLib" parameterType="BugLib">
+        UPDATE "TJM"."BUG_LIB"
+        SET "PORT"=#{port}, "TYPE"=#{type}, "LEVEL"=#{level}, "CVE_NUM"=#{cve_num}, "BUGTRAQ"=#{bugtraq}, "NAME"=#{name}, "CVSS"=#{cvss}, "INFORMATION"=#{information}, "DESCRIPTION"=#{description}, "SOLUTION"=#{solution}
+        WHERE "BID"=#{bid}
+    </update>
+
+    <insert id="insertBugLib" parameterType="BugLib">
+        INSERT INTO "TJM"."BUG_LIB" ("BID", "PORT", "TYPE", "LEVEL", "CVE_NUM", "BUGTRAQ", "NAME", "INFORMATION", "DESCRIPTION", "SOLUTION", "BASE_ID", "CVSS")
+        VALUES (#{bid}, #{port}, #{type}, #{level}, #{cve_num}, #{bugtraq}, #{name}, #{information}, #{description}, #{solution}, #{base_id}, #{cvss})
+    </insert>
+
+    <delete id="deleteBugLibById" parameterType="Integer">
+        DELETE FROM "TJM"."BUG_LIB" WHERE "BID"=#{bid}
     </delete>
 </mapper>

@@ -37,6 +37,8 @@ public class Indicator {
 
     //指标计算方式
     String calMode;
+    //测量输入，知识库展示用
+    public String input;
 
     public Indicator(String indicatorName, String indicatorDescription, ArrayList<Indicator> subIndicator) {
         this.indicatorName = indicatorName;

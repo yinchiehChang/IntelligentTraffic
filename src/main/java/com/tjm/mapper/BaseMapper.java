@@ -116,7 +116,7 @@ public interface BaseMapper {
 
     List<BaseSecurity> querySecurityByLevel(@Param("securityLevel") String securityLevel, @Param("baseId") String baseId);
 
-    int insertSecurity(@Param("security") BaseSecurity security);
+    int insertSecurity(BaseSecurity security);
 
 
     List<BaseArticle> queryArticleList();

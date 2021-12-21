@@ -16,6 +16,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public class FileUtil {
 
@@ -143,6 +144,69 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static Attachement uploadKBFile(HttpServletRequest request, String path_deposit, MultipartFile file, boolean isRandomName, String uploadPath) {
+        //上传知识库文件
+        try {
+            String[] typeImg = {"pdf", "docx", "doc"};
+
+            if (file != null) {
+                String origName = file.getOriginalFilename();// 文件原名称
+                String randomName = UUID.randomUUID().toString() + origName.substring(origName.lastIndexOf("."));
+                System.out.println("上传的文件原名称:" + origName);
+                // 判断文件类型
+                String type = origName.indexOf(".") != -1 ? origName.substring(origName.lastIndexOf(".") + 1, origName.length()) : null;
+                if (type != null) {
+                    boolean booIsType = false;
+                    for (int i = 0; i < typeImg.length; i++) {
+                        if (typeImg[i].equals(type.toLowerCase())) {
+                            booIsType = true;
+                        }
+                    }
+                    //类型正确
+                    if (booIsType) {
+                        //存放文件的路径
+                        String path = new FileSystemResource("").getFile().getAbsolutePath();
+                        path = path + uploadPath;
+                        System.out.println("文件上传的路径" + path);
+                        //组合名称
+                        String fileSrc = path + path_deposit;
+                        System.out.println("随机文件名：" + randomName);
+                        //判断是否存在目录
+                        File targetFile = new File(fileSrc, randomName);
+                        if (!targetFile.exists()) {
+                            targetFile.getParentFile().mkdirs();//创建目录
+                        }
+
+                        //上传
+                        file.transferTo(targetFile);
+                        //完整路径
+                        System.out.println("完整路径:" + targetFile.getAbsolutePath());
+
+                        //将存入文件路径存入数据库中
+                        Attachement attachement = new Attachement(MathUtil.getRandom620(8), origName, targetFile.getAbsolutePath(), type);
+                        return attachement;
+                    }
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static boolean removeKBFile(String path) {
+        try {
+            java.io.File file = new java.io.File(path);
+            file.delete();
+            return true;
+        } catch (Exception e) {
+            System.out.println("删除文件操作出错");
+            e.printStackTrace();
+            return false;
         }
     }
 
