@@ -60,21 +60,15 @@ public class TaskController {
     @ResponseBody
     public List<Task> list(@RequestParam(value = "task_id", required = false) String task_id, @RequestParam(value = "product_name", required = false) String product_name,
                            @RequestParam(value = "contact_name", required = false) String contact_name) {
-        System.out.println("task_id" + task_id);
-        System.out.println("product_name" + product_name);
-        System.out.println("contact_name" + contact_name);
         if ((task_id != null && !"".equals(task_id)) || (product_name != null && !"".equals(product_name)) || (contact_name != null && !"".equals(contact_name))) {
             Task task = new Task();
             task.setTask_id(task_id);
             task.setProduct_name(product_name);
             task.setContact_name(contact_name);
-            System.out.println("task=====" + task);
             List<Task> tasks = taskService.findTask(task);
-            System.out.println("tasks==" + tasks);
             return tasks;
         } else {
             List<Task> taskList = taskService.selectTaskList();
-            System.out.println("2" + taskList);
             return taskList;
         }
     }
