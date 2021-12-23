@@ -64,5 +64,5 @@ management:
 info:
   appName: 公安交通管理软件质量及安全合规性检验管理系统
   appVersion: 1.0.0
-  mavenProjectName: springboot-03-web
+  mavenProjectName: IntelligentTraffic
   mavenProjectVersion: 0.0.1-SNAPSHOT

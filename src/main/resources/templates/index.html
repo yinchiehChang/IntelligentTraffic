@@ -483,8 +483,9 @@
                 success: function (data) {
                     var str = '';
                     str += '<h2 class="sidebar-header" ><p>功能导航</p></h2>\n' +
-                        '        <ul class="nav">\n' +
-                        '          <li class="office"><div class="nav-header"><a target="right" class="ue-clear"><span>首页</span><i class="icon"></i></a></div></li>\n';
+                        '        <ul class="nav">\n' ;
+/*                        + '          <li class="office"><div class="nav-header"><a target="right" class="ue-clear">' +
+                        '<span>首页</span><i class="icon"></i></a></div></li>\n';*/
                     $.each(data, function (i, item) {
                         str += '<li class="' + item.icon + '">\n';
                         str += '<div class="nav-header"><a class="ue-clear">\n';
