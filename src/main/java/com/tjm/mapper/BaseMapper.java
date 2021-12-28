@@ -105,6 +105,8 @@ public interface BaseMapper {
 
     BaseClass queryBaseClassByClassNum(@Param("classNum") int classNum);
 
+    int getClassNumByName(@Param("name") String name);
+
     int insertBaseClass(BaseClass baseClass);
 
     int deleteBaseClassByClassNum(@Param("classNum") int classNum);

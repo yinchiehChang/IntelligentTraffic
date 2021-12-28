@@ -20,4 +20,10 @@ public interface MenuMapper {
 
     //插入Sys_Role_Menu
     int insert_role_menu(Sys_Role_Menu sys_role_menu);
+
+    int getMaxMenuId();
+
+    int insertSysMenu(Menu menu);
+
+    int deleteSysMenu(String name);
 }

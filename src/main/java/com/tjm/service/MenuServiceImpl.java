@@ -3,6 +3,7 @@ package com.tjm.service;
 import com.tjm.mapper.MenuMapper;
 import com.tjm.pojo.Menu;
 import com.tjm.pojo.Sys_Role_Menu;
+import org.apache.xerces.impl.dtd.models.CMAny;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,4 +54,16 @@ public class MenuServiceImpl implements MenuService{
     public int insert_role_menu(Sys_Role_Menu sys_role_menu) {
         return menuMapper.insert_role_menu(sys_role_menu);
     }
+
+    @Override
+    public int getMaxMenuId(){ return menuMapper.getMaxMenuId(); }
+
+    @Override
+    public int insertSysMenu(Menu menu) {
+        menu.setMenu_id(menuMapper.getMaxMenuId() + 1);
+        return menuMapper.insertSysMenu(menu);
+    }
+
+    @Override
+    public int deleteSysMenu(String name) { return menuMapper.deleteSysMenu(name); }
 }

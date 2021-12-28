@@ -28,4 +28,16 @@
         insert into "Sys_Role_Menu"("menu_id","role_id")
         values(#{menu_id},#{role_id})
     </insert>
+
+    <select id="getMaxMenuId" resultType="Integer">
+        SELECT MAX("menu_id") FROM "Sys_Menu"
+    </select>
+
+    <insert id="insertSysMenu" parameterType="Menu">
+        INSERT INTO "Sys_Menu" ("menu_id", "pid", "menu_name", "url", "icon") VALUES (#{menu_id}, #{pid}, #{menu_name}, #{url}, #{icon})
+    </insert>
+
+    <delete id="deleteSysMenu" parameterType="String">
+        DELETE FROM "TJM"."Sys_Menu" WHERE "menu_name"=#{name} AND "pid"=4
+    </delete>
 </mapper>

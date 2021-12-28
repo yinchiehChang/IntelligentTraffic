@@ -177,14 +177,22 @@
             </div>
             <div class="modal-body">
                 <div class="from-group">
-                    <input type="file" id="fileUploader" name="fileUploader" accept=".xls, .xlsx" class="form-control"/>
-                </div>
-                <div class="from-group">
                     <label for="base_type">知识库标准类型</label>
                     <select required id="info_table" class="form-control">
                         <option value="CHECK_ITEM">软件质量-检查项</option>
                         <option value="ITEM">安全检查-检测项</option>
                     </select>
+                </div>
+                <div class="from-group">
+                    <label for="fileUploader">上传文件（仅支持.xls/.xlsx格式）</label>
+                    <input type="file" id="fileUploader" name="fileUploader" accept=".xls, .xlsx" class="form-control"/>
+                </div>
+                <div class="from-group">
+                    <label for="standard">模板下载</label>
+                    <div id="standard">
+                        <a type="button" class="btn btn-primary" href="KBDownloadFile?bid=-1&fileName=quality.xls">软件质量模板</a>
+                        <a type="button" class="btn btn-primary" href="KBDownloadFile?bid=-1&fileName=security.xls">安全检查模板</a>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

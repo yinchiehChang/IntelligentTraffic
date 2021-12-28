@@ -4,6 +4,7 @@ import com.tjm.pojo.*;
 import com.tjm.pojo.base.*;
 import com.tjm.pojo.quality.Indicator;
 import com.tjm.pojo.testCase.FunctionPoint;
+import com.tjm.service.MenuService;
 import com.tjm.utils.ExcelUtils;
 import com.tjm.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class KnowledgeBaseController {
     private BaseService baseService;
     @Autowired
     AttachementService attachementService;
+    @Autowired
+    MenuService menuService;
 
     Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 
@@ -67,12 +70,6 @@ public class KnowledgeBaseController {
         ret.put("baseClasses", baseClasses);
 
         return ret;
-    }
-
-    @RequestMapping("/addBaseClass")
-    public String toAddBaseClass(Model model) {
-
-        return "knowledgeBase/addBaseClass";
     }
 
     @RequestMapping("/dossier")
@@ -449,6 +446,7 @@ public class KnowledgeBaseController {
         BaseClass newClass = new BaseClass();
         newClass.setName(msg.get("name"));
         baseService.insertBaseClass(newClass);
+        menuService.insertSysMenu(new Menu(0, 4, msg.get("name"), "/dossier?baseClass=" + baseService.getClassNumByName(msg.get("name")), "#", new ArrayList<Menu>()));
 
         res.put("result", 0);
         return res;
@@ -457,7 +455,10 @@ public class KnowledgeBaseController {
     @RequestMapping("/KBBaseClassDelete")
     @ResponseBody
     public Map<String,Object> KBDeleteBaseClass(@RequestBody Map<String, Integer> msg) {
+        BaseClass baseClass = baseService.queryBaseClassByClassNum(msg.get("class_num"));
         baseService.deleteBaseClassByClassNum(msg.get("class_num"));
+
+        menuService.deleteSysMenu(baseClass.getName());
 
         Map<String,Object> res = new HashMap<>();
         res.put("result", 0);
@@ -707,7 +708,7 @@ public class KnowledgeBaseController {
                 for (int i = 0; i < file.length; i++) {
                     if (!file[i].isEmpty()) {
                         //上传文件，随机名称，";"分号隔开
-                        Attachement attachement = FileUtil.uploadKBFile(request, "/" + String.valueOf(bid), file[i], false, "/src/main/resources/static/KBFile/");
+                        Attachement attachement = FileUtil.uploadKBFile(request, "/" + String.valueOf(bid), file[i], false, "/src/main/resources/KBFile/");
                         fileName.add(attachement.getUri());
                         attachementService.insertAttachement(attachement);
                     }
@@ -755,7 +756,7 @@ public class KnowledgeBaseController {
     @ResponseBody
     public String KBDownloadFile(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "bid") int bid,  @RequestParam(value = "fileName") String fileName) {
         String path = new FileSystemResource("").getFile().getAbsolutePath();
-        String url = path + "/src/main/resources/static/KBFile/" + String.valueOf(bid) + "/" + fileName;//拼接得到文件完整路径
+        String url = path + "/src/main/resources/KBFile/" + String.valueOf(bid) + "/" + fileName;//拼接得到文件完整路径
 
         if (url != null) {
             //设置文件路径

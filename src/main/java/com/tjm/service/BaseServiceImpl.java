@@ -7,6 +7,7 @@ import com.tjm.pojo.base.Base;
 import com.tjm.pojo.base.BaseNode;
 import com.tjm.pojo.quality.Indicator;
 import com.tjm.pojo.testCase.FunctionPoint;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,6 +75,8 @@ public class BaseServiceImpl implements BaseService {
     public List<BaseClass> queryAllBaseClass(){ return baseMapper.queryAllBaseClass(); }
     @Override
     public BaseClass queryBaseClassByClassNum(int classNum){ return baseMapper.queryBaseClassByClassNum(classNum); }
+    @Override
+    public int getClassNumByName(String name) {return baseMapper.getClassNumByName(name);}
     @Override
     public int insertBaseClass(BaseClass baseClass){ return baseMapper.insertBaseClass(baseClass); }
     @Override
@@ -151,6 +154,7 @@ public class BaseServiceImpl implements BaseService {
     public int deleteIndicatorById(int indicatorId){ return baseMapper.deleteIndicatorById(indicatorId); }
 
 
+    @Override
     public List<com.tjm.pojo.base.BaseNode> queryNodeLv3ByInput(String lv1, String lv2, String lv3){ return baseMapper.queryNodeLv3ByInput(lv1, lv2, lv3); }
     @Override
     public List<com.tjm.pojo.base.BaseNode> queryNodeLv2ByInput(String lv1, String lv2){ return baseMapper.queryNodeLv2ByInput(lv1, lv2); }

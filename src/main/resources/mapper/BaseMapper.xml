@@ -50,6 +50,10 @@
         SELECT * FROM BASE_CLASS WHERE CLASS_NUM=#{classNum}
     </select>
 
+    <select id="getClassNumByName" parameterType="String" resultType="Integer">
+        SELECT "CLASS_NUM" FROM BASE_CLASS WHERE NAME=#{name}
+    </select>
+
     <insert id="insertBaseClass" parameterType="BaseClass">
         INSERT INTO "TJM"."BASE_CLASS" ("NAME") VALUES (#{name})
     </insert>
