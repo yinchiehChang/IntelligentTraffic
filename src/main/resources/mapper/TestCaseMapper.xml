@@ -121,4 +121,14 @@
         FROM "TestCase"
         WHERE "TestCase"."uid" = #{uid} AND "TestCase"."case_result" = 4
     </select>
+
+    <select id="find_RequiredCase"  resultType="TestCase">
+        select * from "TestCase" where "uid"=#{uid}
+        <if test="case_name !=null and case_name !=''">
+            and "case_name"= #{case_name}
+        </if>
+        <if test="identification !=null and identification !=''">
+            and "case_id"= #{identification}
+        </if>
+    </select>
 </mapper>

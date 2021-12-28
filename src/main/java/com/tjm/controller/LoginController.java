@@ -1,6 +1,7 @@
 package com.tjm.controller;
 
 import com.tjm.config.Log;
+import com.tjm.pojo.Sys_User;
 import com.tjm.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -37,6 +38,8 @@ public class LoginController {
         //执行登录方法，如果没有异常，则ok
         try {
             subject.login(token);
+            model.addAttribute("username",username);
+            model.addAttribute("password",password);
             return "index";
         }catch(UnknownAccountException e){//用户名不存在
             model.addAttribute("msg","用户名错误");

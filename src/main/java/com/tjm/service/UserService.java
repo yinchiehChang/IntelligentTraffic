@@ -23,6 +23,8 @@ public interface UserService {
 
     int addUserRole(Sys_User_Role sys_user_role);
 
+    int updatePass(int user_id,String newpass);
+
     //根据用户名和角色查找对应的角色信息
     Sys_User find_user(@Param("user")String user, @Param("role")String role);
 

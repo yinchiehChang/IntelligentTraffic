@@ -12,7 +12,8 @@
 
     <body>
     <div class="title"><h2>测试用例</h2></div>
-    <form class="query">
+    <form class="query" th:action="@{'/TestCases/queryExeCase/'+${uid}}" method="post">
+        <p style="color: red" th:text="${msg}"></p>
         <div class="tabe_bot">
             <div class="l_left">
                 <label>用例名称：</label>

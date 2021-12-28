@@ -22,4 +22,9 @@ public class OperationLogServiceImpl implements OperationLogService{
     public List<OperationLog> queryLogList(){
         return operLogMapper.queryLogList();
     }
+
+    @Override
+    public List<OperationLog> findByRequired(OperationLog operationLog) {
+        return operLogMapper.findByRequired(operationLog);
+    }
 }

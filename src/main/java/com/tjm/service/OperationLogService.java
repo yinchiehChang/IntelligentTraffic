@@ -12,5 +12,5 @@ public interface OperationLogService {
 
     List<OperationLog> queryLogList();
 
-
+    List<OperationLog> findByRequired(OperationLog operationLog);
 }

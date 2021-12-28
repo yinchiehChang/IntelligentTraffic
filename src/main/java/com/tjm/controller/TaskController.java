@@ -179,6 +179,9 @@ public class TaskController {
                 tasksAudited.add(tasks.get(i));
             }
         }
+        if(null==tasksAudited || tasksAudited.size()==0){
+            model.addAttribute("msg","没有找到匹配记录");
+        }
         System.out.println(tasksAudited);
         model.addAttribute("tasks", tasksAudited);
         return "mywork";

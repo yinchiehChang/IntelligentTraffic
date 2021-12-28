@@ -57,4 +57,10 @@
     <select id="findAndroid_Users" resultType="Android_User">
         select * from "Android_User"
     </select>
+
+    <update id="updatePass">
+        update "Sys_User"
+        set "password" = #{newpass}
+        where "user_id"= #{user_id}
+    </update>
 </mapper>

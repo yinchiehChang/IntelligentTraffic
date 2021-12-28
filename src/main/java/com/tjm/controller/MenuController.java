@@ -43,7 +43,7 @@ public class MenuController {
      * 找出所有列表
      * @return
      */
-    @RequestMapping(value = "/findMenuList",method = RequestMethod.POST)
+    @RequestMapping(value = "/findMenuList",method = RequestMethod.GET)
     @ResponseBody
     public List<Menu> findMenuList(){
         List<Menu> menus = menuService.findMenuList();

@@ -470,4 +470,30 @@ public class TestCaseController {
         return res;
     }
 
+    //查询制定测试用例信息
+    @PostMapping("/queryEditCase/{uid}")
+    public String find_RequiredCase(@RequestParam(value="case_name",required =false) String case_name, @RequestParam(value="identification",required =false) String identification,
+                                    @PathVariable(value="uid")int uid,
+                            Model model){
+        List<TestCase> testCaseList = testCaseService.find_RequiredCase(case_name,identification,uid);
+        if(null==testCaseList || testCaseList.size()==0){
+            model.addAttribute("msg","没有找到匹配记录");
+        }
+        model.addAttribute("testCaseList",testCaseList);
+        return "testCase/TestCases";
+    }
+
+    //查询执行测试用例信息
+    @PostMapping("/queryExeCase/{uid}")
+    public String find_RequiredExeCase(@RequestParam(value="case_name",required =false) String case_name, @RequestParam(value="identification",required =false) String identification,
+                                       @PathVariable(value="uid")int uid,
+                                    Model model){
+        List<TestCase> testCaseList = testCaseService.find_RequiredCase(case_name,identification,uid);
+        if(null==testCaseList || testCaseList.size()==0){
+            model.addAttribute("msg","没有找到匹配记录");
+        }
+        model.addAttribute("testCases",testCaseList);
+        return "testCase/ExecuteCases";
+    }
+
 }

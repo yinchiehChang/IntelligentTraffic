@@ -28,6 +28,8 @@ public interface UserMapper {
     //根据用户id查找用户角色
     String queryRole(@Param("id") int id);
 
+    int updatePass(int user_id,String newpass);
+
     //插入用户角色关联关系表
     int addUserRole(Sys_User_Role sys_user_role);
 

@@ -5,6 +5,9 @@ import com.tjm.config.OperLog;
 import com.tjm.pojo.*;
 import com.tjm.service.RoleService;
 import com.tjm.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,12 +47,17 @@ public class UserController {
     @Log
     @OperLog(operModul = "用户管理",operType = "新增",operDesc = "新增用户")
     public Map<String,Object> add(Sys_User user){
-        userService.addUser(user);
-        Sys_User sys_user = userService.queryUserByName(user.getUser_name());
         Map<String,Object> res = new HashMap<>();
-        res.put("user",sys_user);
-        res.put("code","1");
-        res.put("message","新增成功");
+        if(userService.queryUserByName(user.getUser_name())==null){
+            userService.addUser(user);
+            Sys_User sys_user = userService.queryUserByName(user.getUser_name());
+            res.put("user",sys_user);
+            res.put("code","1");
+            res.put("message","新增成功");
+        }else{
+            res.put("code","0");
+            res.put("errmessage","用户之前已被添加，请更换用户名");
+        }
         return res;
     }
 
@@ -62,10 +70,31 @@ public class UserController {
         return "redirect:/users";
     }
 
+    //跳转到修改密码页面
+    @RequestMapping("/EditThisPassword")
+    public String EditPassword(Model model){
+        Sys_User user = (Sys_User) SecurityUtils.getSubject().getPrincipal();
+        System.out.println("user=="+user);
+        model.addAttribute("user",user);
+        return "EditMyPassword";
+    }
+
     //修改密码
-    @GetMapping("/EditPassword")
-    public String EditPassword(){
-        return "redirect:/EditMyPassword.html";
+    @RequestMapping(value = "/updatePass",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> updatePassword(int user_id,String newpass){
+        Map<String,Object> res = new HashMap<>();
+        try{
+            userService.updatePass(user_id,newpass);
+        }catch (Exception e){
+            res.put("code","1");
+            res.put("erromessage","密码修改失败");
+        }
+        res.put("code","0");
+        res.put("message","密码修改成功");
+        System.out.println("user_id"+user_id);
+        System.out.println("newpass"+newpass);
+        return res;
     }
 
     //保存user与role的关联关系

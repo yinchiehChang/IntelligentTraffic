@@ -83,4 +83,9 @@ public class TestCaseServiceImpl implements TestCaseService {
     public int countPassCases(int uid) {
         return testCaseMapper.countPassCases(uid);
     }
+
+    @Override
+    public List<TestCase> find_RequiredCase(String case_name, String identification,int uid) {
+        return testCaseMapper.find_RequiredCase(case_name,identification,uid);
+    }
 }
