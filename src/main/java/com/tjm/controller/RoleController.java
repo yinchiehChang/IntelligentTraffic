@@ -26,7 +26,7 @@ public class RoleController {
 
     @GetMapping("/addRole")
     public String toAddpage(){
-        return "role/add";
+        return "addRole";
     }
 
     //查询所有角色

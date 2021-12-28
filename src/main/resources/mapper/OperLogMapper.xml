@@ -17,4 +17,14 @@
         select * from "OperationLog" Order by "oper_id"
     </select>
 
+    <select id="findByRequired" parameterType="OperationLog" resultType="OperationLog">
+        select * from "OperationLog" where 1=1
+        <if test="username !=null and username !=''">
+            and "username"= #{username}
+        </if>
+        <if test="oper_type !=null and oper_type !=''">
+            and "oper_type"= #{oper_type}
+        </if>
+    </select>
+
 </mapper>

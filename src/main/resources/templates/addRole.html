@@ -3,12 +3,13 @@
 <HEAD>
   <TITLE> ZTREE DEMO </TITLE>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" href="../css/demo.css" type="text/css">
-  <link rel="stylesheet" href="../css/ztree/zTreeStyle.css" type="text/css">
-  <script type="text/javascript" src="../js/ztree/jquery-1.4.4.min.js"></script>
-  <script type="text/javascript" src="../js/ztree/jquery.ztree.core.js"></script>
-  <script type="text/javascript" src="../js/ztree/jquery.ztree.excheck.js"></script>
+  <link rel="stylesheet" href="/css/demo.css" type="text/css">
+  <link rel="stylesheet" href="/css/ztree/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="/js/ztree/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript" src="/js/ztree/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.js"></script>
   <th:block th:include="include :: header('新增任务')" />
+<!--  <script type="text/javascript" th:src="@{/js/jqueryNew.js}"></script>-->
 
   <style>
     .r{position:fixed; bottom:0;}
@@ -57,7 +58,8 @@
 </div>
 <div class="row">
   <div class="col-sm-offset-5 col-sm-10 r">
-    <button type="button" class="btn btn-sm btn-primary" ><i class="fa fa-check" onclick="saveRoles()"></i>提交</button>&nbsp;
+    <button type="button" class="btn btn-sm btn-primary" onclick="saveRoles()"><i class="fa fa-check"></i>提交</button>&nbsp;
+<!--    <button type="button" class="btn btn-sm btn-primary" ><i class="fa fa-check" onclick="saveRoles()"></i>提交</button>&nbsp;-->
     <button type="button" class="btn btn-sm btn-danger" onclick="window.location.href='/roles'"><i class="fa fa-reply-all"></i>关 闭 </button>
   </div>
 </div>
@@ -90,7 +92,7 @@
     $.ajax({
         async:false,
         cache:false,
-        type:'post',
+        type:'get',
         datatype:'json',
         url:'/findMenuList',
         success:function (data){
@@ -144,6 +146,7 @@
 </script>
 <SCRIPT>
   function saveRoles(){
+      console.log("1");
     //获取值
     var role_name = $("#role_name").val();
     var menu_names = $("#menuSel").val();
@@ -152,7 +155,7 @@
       url: "/role_add",
       type: "post",
       dataType: "json",
-      async:false,
+      // async:false,
       data: {
         "role_name":role_name,
         "menu_names":menu_names,
@@ -160,43 +163,14 @@
       },
       success:function (res){
           if(res.code == 1){
-            alert(res.msg);
+            // alert(res.msg);
             //刷新页面
-            // window.location.href = "/roles";
+            window.location.href = "/roles";
           }else{
             alert(res.errormsg);
           }
         }
     })
-
-    //修改前
-    // $.ajax({
-    //   url: "/role_add",
-    //   type: "post",
-    //   dataType: "json",
-    //   async:false,
-    //   data: {
-    //     "role_name":role_name,
-    //   },
-    //   success:function (){
-    //         $.ajax({
-    //           url:"/save_role_menu",
-    //           type:"post",
-    //           dataType: "json",
-    //           data:{
-    //             "role_name":role_name,
-    //             "menu_names":menu_names,
-    //             "menu_ids":menu_ids,
-    //           },
-    //           success:function (){
-    //               $("#role_name").val("");
-    //               $("#menuSel").val("");
-    //               $("#menu_ids").val("");
-    //               alert("角色新增成功！");
-    //           }
-    //         })
-    //     }
-    // })
   }
 </SCRIPT>
 </BODY>

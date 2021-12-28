@@ -90,25 +90,40 @@ public class QualityModelController {
         return "qualityEvaluation/qualityModelConf";
     }
 
+    private void getModelToConfig(PSTMQModel model, int uid) {
+        ArrayList<Indicator> firstIndicator = model.getFirstIndicator();
+        for (Indicator level1 : firstIndicator) {
+//            System.out.println(level1.getIndicatorName());
+            ModelConfig l1ModelConfig = new ModelConfig(uid, level1.getIndicatorName(),
+                    "null", 0, 0
+                    , "", "", 0, 0);
+            modelConfigService.insert(l1ModelConfig);
+            ArrayList<Indicator> subIndicator = level1.getSubIndicator();
+            for (Indicator level2 : subIndicator) {
+//                System.out.println("    " + level2.getIndicatorName() + "   "  + level2.getSuperIndicatorName());
+                ModelConfig l2ModelConfig = new ModelConfig(uid, level2.getIndicatorName(),
+                        level1.getIndicatorName(), 0, 0
+                        , "", "", 0, 0);
+                modelConfigService.insert(l2ModelConfig);
+                ArrayList<Indicator> level2SubIndicator = level2.getSubIndicator();
+                for (Indicator level3 : level2SubIndicator) {
+//                    System.out.println("        " + level3.getIndicatorName() + "   " + level3.getSuperIndicatorName() + "   " + level3.getMolecular() + "   " + level3.getDenominator());
+                    ModelConfig l3ModelConfig = new ModelConfig(uid, level3.getIndicatorName(),
+                            level2.getIndicatorName(), 0, 0
+                            , level3.getMolecular(), level3.getDenominator(),
+                            0, 0);
+                    modelConfigService.insert(l3ModelConfig);
+                }
+            }
+        }
+    }
 
     //配置McCall
     @RequestMapping("/McCall/{qualityUid}")
     public String McCall(@PathVariable("qualityUid") int uid) {
-        PSTMQModel model = getModel("公安交通管理软件质量模型");
+        PSTMQModel model = getModel("McCall模型");
 //        System.out.println(model);
-        ArrayList<Indicator> firstIndicator = model.getFirstIndicator();
-        for (Indicator level1 : firstIndicator) {
-            System.out.println(level1.getIndicatorName());
-            ArrayList<Indicator> subIndicator = level1.getSubIndicator();
-            for (Indicator level2 : subIndicator) {
-                System.out.println("    " + level2.getIndicatorName() + "   "  + level2.getSuperIndicatorName());
-                ArrayList<Indicator> level2SubIndicator = level2.getSubIndicator();
-                for (Indicator level3 : level2SubIndicator) {
-                    System.out.println("        " + level3.getIndicatorName() + "   " + level3.getSuperIndicatorName() + "   " + level3.getMolecular() + "   " + level3.getDenominator());
-                }
-            }
-        }
-
+        getModelToConfig(model, uid);
 
         return "redirect:/qualityModel/AllQualities";
     }
@@ -116,6 +131,9 @@ public class QualityModelController {
     //配置Boehm
     @RequestMapping("/Boehm/{qualityUid}")
     public String Boehm(@PathVariable("qualityUid") int uid) {
+        PSTMQModel model = getModel("Boehm模型");
+//        System.out.println(model);
+        getModelToConfig(model, uid);
 
         return "redirect:/qualityModel/AllQualities";
     }
@@ -123,6 +141,9 @@ public class QualityModelController {
     //配置ISO
     @RequestMapping("/ISO/{qualityUid}")
     public String ISO(@PathVariable("qualityUid") int uid) {
+        PSTMQModel model = getModel("ISO模型");
+//        System.out.println(model);
+        getModelToConfig(model, uid);
 
         return "redirect:/qualityModel/AllQualities";
     }
@@ -138,8 +159,6 @@ public class QualityModelController {
 //        PSTMQModel pstmsModel = PSTMQModel.P_S_T_M_S_Q_M();
         PSTMQModel pstmsModel = getModel("公安交通管理软件质量模型");
         model.addAttribute("QualityModel", pstmsModel);
-
-
 
         return "qualityEvaluation/configModel";
     }
@@ -227,7 +246,7 @@ public class QualityModelController {
         //应该是3
         quality.setStatus(4);
         qualityService.updatesStatus(quality);
-        
+
         return "redirect:/qualityModel/AllQualities";
     }
 

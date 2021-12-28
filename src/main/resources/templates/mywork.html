@@ -19,10 +19,11 @@
 <body>
 <div class="title"><h2>审核任务查询</h2></div>
 <form class="query" th:action="@{/find_task_required}" method="post">
+    <p style="color: red" th:text="${msg}"></p>
     <div class="tabe_bot">
         <div class="l_left">
-            <label>系统类别：</label>
-            <input type="text" placeholder="请输入系统类别" name="network" ></div>
+            <label>平台类别：</label>
+            <input type="text" placeholder="请输入平台类别" name="network" ></div>
         <div class="l_left">
             <label>产品名称：</label>
             <input type="text" placeholder="请输入产品名称" name="product_name" ></div>

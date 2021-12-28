@@ -26,11 +26,6 @@ public class LogController {
     @Autowired
     private SysLogService sysLogService;
 
-//    private LogDao logDao;
-//
-//    public LogController(LogDao logDao) {
-//        this.logDao = logDao;
-//    }
 
     //查询日志记录
     @RequestMapping("/logs")

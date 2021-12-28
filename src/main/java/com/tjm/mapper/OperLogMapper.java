@@ -12,4 +12,6 @@ public interface OperLogMapper {
     int insertOperLog(OperationLog operationLog);
 
     List<OperationLog> queryLogList();
+
+    List<OperationLog> findByRequired(OperationLog operationLog);
 }

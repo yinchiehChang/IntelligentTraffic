@@ -20,17 +20,14 @@
 <div class="title">
   <h2>操作日志</h2>
 </div>
-<form class="query"  method="post">
+<form class="query" th:action="@{/find_operlog_required}" method="post">
     <div class="tabe_bot">
-<!--        <div class="l_left">-->
-<!--            <label>日志编号：</label>-->
-<!--            <input type="text" placeholder="请输入日志编号" name="log_id" ></div>-->
         <div class="l_left">
           <label>操作人：</label>
           <input type="text" placeholder="请输入姓名" name="username" ></div>
         <div class="l_left">
             <label>操作类型：</label>
-            <input type="text" placeholder="请输入操作类型" name="method_name" ></div>
+            <input type="text" placeholder="请输入操作类型" name="oper_type" ></div>
         <button class="tabe_btn" >查询</button>
     </div>
 </form>

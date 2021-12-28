@@ -3,7 +3,7 @@ spring:
     username: 'tjm'
     password: '123'
     # 假如时区报错，加入一个时区配置serverTimezone
-    url: jdbc:oracle:thin:@localhost:1521:orcl
+    url: jdbc:oracle:thin:@localhost:1521:XE
     driver-class-name: oracle.jdbc.driver.OracleDriver
     type: com.alibaba.druid.pool.DruidDataSource
 

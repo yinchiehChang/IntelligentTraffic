@@ -2,6 +2,7 @@ package com.tjm.service;
 
 import com.tjm.pojo.testCase.TestCase;
 import com.tjm.pojo.testCase.Test_Procedure;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,4 +37,6 @@ public interface TestCaseService {
     int countCases(int uid);
 
     int countPassCases(int uid);
+
+    List<TestCase> find_RequiredCase(@Param("case_name")String case_name, @Param("identification")String identification,int uid);
 }

@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public int updatePass(int user_id, String newpass) {
+        return userMapper.updatePass(user_id,newpass);
+    }
+
+    @Override
     public Sys_User find_user(String user, String role) {
         return userMapper.find_user(user,role);
     }

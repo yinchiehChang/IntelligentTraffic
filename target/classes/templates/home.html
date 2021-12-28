@@ -41,13 +41,13 @@
                     </li>
 
                     <li>
-                        <a data-toggle="modal" data-target="#NewKBModal"><img src="images/myFiles.png" /></a>
-                        <p><a data-toggle="modal" data-target="#NewKBModal">新增知识库</a></p>
+                        <a href="/dossier_my.html" class="img" target="right"><img src="images/myFiles.png"/></a>
+                        <p><a href="/dossier?baseClass=1" target="right">软件质量知识库</a></p>
                     </li>
 
                     <li>
-                        <a data-toggle="modal" data-target="#DeleteKBModal"><img src="images/myFiles.png" /></a>
-                        <p><a data-toggle="modal" data-target="#DeleteKBModal">删除知识库</a></p>
+                        <a href="/dossier_aq.html" class="img" target="right"><img src="images/myFiles.png"/></a>
+                        <p><a href="/dossier?baseClass=0" target="right">安全检查知识库</a></p>
                     </li>
 
                     <li>
@@ -138,7 +138,6 @@
                                     yAxis: {},
                                     series: [
                                         {
-                                            name: '质量模型柱状图',
                                             color: [],
                                             type: 'bar',
                                             data: [],
@@ -294,7 +293,7 @@
             <div class="wrap">
                 <div class="title ue-clear">
                     <h2>软件安全检查结果展示</h2>
-                    <a href="document_wait.html" class="more" target="right">更多</a>
+                    <a href="/Records/test_records" class="more" target="right">更多</a>
                 </div>
                 <div class="content">
                     <table class="table table-striped table-sm" id="check_table">
@@ -564,7 +563,7 @@
                         title: '软件名称'
                     }, {
                         field: 'name',
-                        title: '安卓端用户名'
+                        title: '下发用户名'
                     },
                     {
                         field: 'noqualifiedNum',
