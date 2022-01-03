@@ -17,7 +17,9 @@
 <!--    <packaging>war</packaging>-->
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <repositories>
@@ -298,13 +300,13 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.tjm.Intelligent_trafficApplication</mainClass>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
 
         <resources>
