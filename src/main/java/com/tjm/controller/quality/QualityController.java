@@ -42,8 +42,8 @@ public class QualityController {
     //查询全部
     @RequestMapping("/AllQualities")
     public String list(Model model) {
-        File directory = new File("src/main/resources/word/quality/template");
-        File directory2 = new File("src/main/resources/word/quality/template-parse");
+        File directory = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template");
+        File directory2 = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template-parse");
         try {
             FileUtils.cleanDirectory(directory);
             FileUtils.cleanDirectory(directory2);
@@ -67,7 +67,7 @@ public class QualityController {
         List<String> headerList;
         File file;
         try {
-            File directory = new File("src/main/resources/word/quality/template-parse");
+            File directory = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template-parse");
             List<File> fileList = (List<File>) FileUtils.listFiles(directory, null, false);//列出该目录下的所有文件，不递归
 //            path = fileList.get(0).getAbsolutePath();
             file = fileList.get(0);
@@ -75,8 +75,9 @@ public class QualityController {
                 // load DOC with an instance of Document
                 Document document = new Document(file.getAbsolutePath());
                 // call Save method while passing SaveFormat.DOCX
-                document.save("src/main/resources/word/quality/template-parse/doc2docx.docx", SaveFormat.DOCX);
-                file = new File("src/main/resources/word/quality/template-parse/doc2docx.docx");
+                document.save("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template-parse\\doc2docx.docx",
+                        SaveFormat.DOCX);
+                file = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template-parse\\doc2docx.docx");
 //                System.out.println(file.getAbsolutePath());
             }
 
@@ -120,13 +121,6 @@ public class QualityController {
             e.printStackTrace();
         }
 
-        //清空临时文件夹
-        /*File directory = new File("src/main/resources/word/quality/template-parse");
-        try {
-            FileUtils.cleanDirectory(directory);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
         return map;
     }
@@ -179,7 +173,7 @@ public class QualityController {
     //删除
     @RequestMapping("/del/{qualityUid}")
     public String deleteQuality(@PathVariable("qualityUid") int uid) {
-        String destination = "src/main/resources/word/quality/" + uid + "/";
+        String destination = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\" + uid + "\\";
         File directory = new File(destination);
         org.apache.commons.io.FileUtils.deleteQuietly(directory);
         qualityService.deleteQualityById(uid);
@@ -191,7 +185,7 @@ public class QualityController {
     //修改
     @RequestMapping("/edit/{qualityUid}")
     public String editQuality(@PathVariable("qualityUid") int uid, Model model) {
-        File directory = new File("src/main/resources/word/quality/template");
+        File directory = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template");
         try {
             FileUtils.cleanDirectory(directory);
         } catch (IOException e) {
@@ -257,16 +251,13 @@ public class QualityController {
 
         Integer uid = quality.getUid();
 
-        String source = "src/main/resources/word/quality/template/";
-        /*File requireDir = new File(source + "RequireFile/");
-        File designDir = new File(source + "DesignFile/");
-        File codingDir = new File(source + "CodingFile/");
-        File testDir = new File(source + "TestFile/");*/
-        File specificationDir = new File(source + "SoftwareRequirementsSpecification/");
-        File manualDir = new File(source + "SoftwareManual/");
-        File codeFileDir = new File(source + "CodeFile/");
+        String source = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template\\";
 
-        String destination = "src/main/resources/word/quality/" + uid + "/";
+        File specificationDir = new File(source + "SoftwareRequirementsSpecification\\");
+        File manualDir = new File(source + "SoftwareManual\\");
+        File codeFileDir = new File(source + "CodeFile\\");
+
+        String destination = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\" + uid + "\\";
         File destDir = new File(destination);
 
         if (specificationDir.exists()) {
@@ -315,8 +306,8 @@ public class QualityController {
     //添加界面
     @RequestMapping("/toAddQuality")
     public String toAddPage(Model model) {
-        File directory = new File("src/main/resources/word/quality/template");
-        File directory2 = new File("src/main/resources/word/quality/template-parse");
+        File directory = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template");
+        File directory2 = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template-parse");
 
         try {
             FileUtils.cleanDirectory(directory);
@@ -351,10 +342,10 @@ public class QualityController {
         quality.setManual_url("");
         quality.setCode_file_url("");
 
-        String source = "src/main/resources/word/quality/template/";
+        String source = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template\\";
         File srcDir = new File(source);
         File[] subdirs = srcDir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
-        String destination = "src/main/resources/word/quality/" + uid + "/";
+        String destination = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\" + uid + "\\";
         File destDir = new File(destination);
 
         assert subdirs != null;
@@ -363,7 +354,7 @@ public class QualityController {
 //                System.out.println(dir.getName());
                 if (dir.getName().equals("SoftwareRequirementsSpecification")) {
                     FileUtils.moveToDirectory(dir, destDir, true);
-                    String url = destination + "SoftwareRequirementsSpecification/";
+                    String url = destination + "SoftwareRequirementsSpecification\\";
                     File urlFile = new File(url);
                     List<File> fileList = (List<File>)FileUtils.listFiles(urlFile,null,false);//列出该目录下的所有文件，不递归
 //                    System.out.println(fileList.get(0).getAbsolutePath());
@@ -371,7 +362,7 @@ public class QualityController {
                 }
                 if (dir.getName().equals("SoftwareManual")) {
                     FileUtils.moveToDirectory(dir, destDir, true);
-                    String url = destination + "SoftwareManual/";
+                    String url = destination + "SoftwareManual\\";
                     File urlFile = new File(url);
                     List<File> fileList = (List<File>)FileUtils.listFiles(urlFile,null,false);//列出该目录下的所有文件，不递归
 //                    System.out.println(fileList.get(0).getAbsolutePath());
@@ -379,7 +370,7 @@ public class QualityController {
                 }
                 if (dir.getName().equals("CodeFile")) {
                     FileUtils.moveToDirectory(dir, destDir, true);
-                    String url = destination + "CodeFile/";
+                    String url = destination + "CodeFile\\";
                     File urlFile = new File(url);
                     List<File> fileList = (List<File>)FileUtils.listFiles(urlFile,null,false);//列出该目录下的所有文件，不递归
 //                    System.out.println(fileList.get(0).getAbsolutePath());
