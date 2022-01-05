@@ -226,7 +226,8 @@ public class FileUtil {
         return result;
     }
 
-    public static void uploadFile(HttpServletRequest request, String path_deposit, MultipartFile file, boolean isRandomName, String uploadPath) {
+    public static void uploadFile(HttpServletRequest request, String path_deposit, MultipartFile file
+            , boolean isRandomName, String uploadPath) {
         //上传
         try {
             String[] typeImg = {"docx", "doc", "zip"};
@@ -247,8 +248,9 @@ public class FileUtil {
                     if (booIsType) {
                         //存放文件的路径
                         String path = new FileSystemResource("").getFile().getAbsolutePath();
-//                        System.out.println(path);
-                        path = path + uploadPath;
+                        System.out.println(path);
+                        path = uploadPath;
+//                        path = path + uploadPath;
 //                        String path = "src/main/resources/word/quality/template";
                         System.out.println("文件上传的路径" + path);
                         //组合名称

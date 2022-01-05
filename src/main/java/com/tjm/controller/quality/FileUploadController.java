@@ -28,7 +28,7 @@ public class FileUploadController {
     @ResponseBody
     public Map<String,Object> uploadSpecification(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
         String uploadPath = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template";
-        String pathDeposit = "\\SoftwareRequirementsSpecification\\";
+        String pathDeposit = "\\SoftwareRequirementsSpecification";
         Map<String, Object> resultMap = uploadFiles(request, response, file, uploadPath, pathDeposit);
         return resultMap;
     }
