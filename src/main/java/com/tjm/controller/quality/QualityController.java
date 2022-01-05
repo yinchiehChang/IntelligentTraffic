@@ -67,9 +67,10 @@ public class QualityController {
         List<String> headerList;
         File file;
         try {
-            File directory = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template-parse");
+            File directory = new File("D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template\\template-parse");
             List<File> fileList = (List<File>) FileUtils.listFiles(directory, null, false);//列出该目录下的所有文件，不递归
 //            path = fileList.get(0).getAbsolutePath();
+            System.out.println(fileList.get(0).getAbsolutePath());
             file = fileList.get(0);
             if (file.getAbsolutePath().endsWith(".doc")) {
                 // load DOC with an instance of Document

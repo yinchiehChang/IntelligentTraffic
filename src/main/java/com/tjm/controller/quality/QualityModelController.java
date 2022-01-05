@@ -91,6 +91,7 @@ public class QualityModelController {
     }
 
     private void getModelToConfig(PSTMQModel model, int uid) {
+        System.out.println(model);
         ArrayList<Indicator> firstIndicator = model.getFirstIndicator();
         for (Indicator level1 : firstIndicator) {
 //            System.out.println(level1.getIndicatorName());
