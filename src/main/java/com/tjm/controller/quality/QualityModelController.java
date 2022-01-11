@@ -126,7 +126,14 @@ public class QualityModelController {
 //        System.out.println(model);
         getModelToConfig(model, uid);
 
+        qualityService.updateModel(uid, "McCall模型");
+        Quality quality = qualityService.findQualityById(uid);
+        quality.setStatus(3);
+        qualityService.updatesStatus(quality);
+
         return "redirect:/qualityModel/AllQualities";
+
+
     }
 
     //配置Boehm
@@ -135,6 +142,11 @@ public class QualityModelController {
         PSTMQModel model = getModel("Boehm模型");
 //        System.out.println(model);
         getModelToConfig(model, uid);
+
+        qualityService.updateModel(uid, "Boehm模型");
+        Quality quality = qualityService.findQualityById(uid);
+        quality.setStatus(3);
+        qualityService.updatesStatus(quality);
 
         return "redirect:/qualityModel/AllQualities";
     }
@@ -146,6 +158,11 @@ public class QualityModelController {
 //        System.out.println(model);
         getModelToConfig(model, uid);
 
+        qualityService.updateModel(uid, "ISO模型");
+        Quality quality = qualityService.findQualityById(uid);
+        quality.setStatus(3);
+        qualityService.updatesStatus(quality);
+
         return "redirect:/qualityModel/AllQualities";
     }
 
@@ -153,8 +170,6 @@ public class QualityModelController {
     //配置公安交管软件质量模型
     @RequestMapping("/conf/{qualityUid}")
     public String editQuality(@PathVariable("qualityUid") int uid, Model model) {
-        /*Quality qualityById = qualityService.findQualityById(uid);
-        model.addAttribute("quality", qualityById);*/
         this.uid = uid;
         model.addAttribute("uid", uid);
 //        PSTMQModel pstmsModel = PSTMQModel.P_S_T_M_S_Q_M();
@@ -245,7 +260,7 @@ public class QualityModelController {
         qualityService.updateModel(uid, "公安交管软件质量模型");
         Quality quality = qualityService.findQualityById(uid);
         //应该是3
-        quality.setStatus(4);
+        quality.setStatus(3);
         qualityService.updatesStatus(quality);
 
         return "redirect:/qualityModel/AllQualities";
