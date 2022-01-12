@@ -168,7 +168,7 @@ public class FileUtil {
                     //类型正确
                     if (booIsType) {
                         //存放文件的路径
-                        String path = new FileSystemResource("").getFile().getAbsolutePath();
+                        String path = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\";
                         path = path + uploadPath;
                         System.out.println("文件上传的路径" + path);
                         //组合名称

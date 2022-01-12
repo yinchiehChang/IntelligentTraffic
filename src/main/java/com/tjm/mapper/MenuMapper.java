@@ -3,6 +3,7 @@ package com.tjm.mapper;
 import com.tjm.pojo.Menu;
 import com.tjm.pojo.Sys_Role_Menu;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +26,5 @@ public interface MenuMapper {
 
     int insertSysMenu(Menu menu);
 
-    int deleteSysMenu(String name);
+    int deleteSysMenu(@Param("name") String name);
 }
