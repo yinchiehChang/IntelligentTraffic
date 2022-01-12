@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <div th:include="/qualityEvaluation/common-quality :: commonheader"></div>
+        <div th:include="qualityEvaluation/common-quality :: commonheader"></div>
         <title>代码信息解析</title>
     </head>
     <body>
@@ -88,7 +88,7 @@
 
     </body>
 
-    <div th:replace="/qualityEvaluation/common-quality :: #commonScript"></div>
+    <div th:replace="qualityEvaluation/common-quality :: #commonScript"></div>
     <script type="text/javascript">
         $(document).ready(function(){
             var error = $("#fileError").text();

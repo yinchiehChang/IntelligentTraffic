@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8">
-        <div th:include="/qualityEvaluation/common-quality :: commonheader"></div>
+        <div th:include="qualityEvaluation/common-quality :: commonheader"></div>
         <title>评价指标计算</title>
         <style>
             .finalScore {
@@ -14,7 +14,7 @@
         </style>
     </head>
 
-    <span th:text="${uid}"></span>
+    <span th:text="${uid}" hidden="hidden"></span>
 
     <body class="col-sm-12">
         <form id="form-user-add" class="form-horizontal" action="" method="post">
@@ -69,6 +69,6 @@
 
     </body>
 
-    <div th:replace="/qualityEvaluation/common-quality :: #commonScript"></div>
+    <div th:replace="qualityEvaluation/common-quality :: #commonScript"></div>
 
 </html>

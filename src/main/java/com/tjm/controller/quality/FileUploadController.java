@@ -27,8 +27,8 @@ public class FileUploadController {
     @RequestMapping(value = "/uploadSpecification")
     @ResponseBody
     public Map<String,Object> uploadSpecification(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        String uploadPath = "/src/main/resources/word/quality/template";
-        String pathDeposit = "/SoftwareRequirementsSpecification/";
+        String uploadPath = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template";
+        String pathDeposit = "\\SoftwareRequirementsSpecification";
         Map<String, Object> resultMap = uploadFiles(request, response, file, uploadPath, pathDeposit);
         return resultMap;
     }
@@ -36,8 +36,8 @@ public class FileUploadController {
     @RequestMapping(value = "/uploadManual")
     @ResponseBody
     public Map<String,Object> uploadManual(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        String uploadPath = "/src/main/resources/word/quality/template";
-        String pathDeposit = "/SoftwareManual/";
+        String uploadPath = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template";
+        String pathDeposit = "\\SoftwareManual\\";
         Map<String, Object> resultMap = uploadFiles(request, response, file, uploadPath, pathDeposit);
         return resultMap;
     }
@@ -45,8 +45,8 @@ public class FileUploadController {
     @RequestMapping(value = "/uploadCode")
     @ResponseBody
     public Map<String,Object> uploadCode(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        String uploadPath = "/src/main/resources/word/quality/template";
-        String pathDeposit = "/CodeFile/";
+        String uploadPath = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template";
+        String pathDeposit = "\\CodeFile\\";
         Map<String, Object> resultMap = uploadFiles(request, response, file, uploadPath, pathDeposit);
         return resultMap;
     }
@@ -54,8 +54,8 @@ public class FileUploadController {
     @RequestMapping(value = "/upLoadWordParse")
     @ResponseBody
     public Map<String,Object> upLoadWordParse(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        String uploadPath = "/src/main/resources/word/quality";
-        String pathDeposit = "/template-parse/";
+        String uploadPath = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources\\word\\quality\\template";
+        String pathDeposit = "\\template-parse\\";
         Map<String, Object> resultMap = uploadFiles(request, response, file, uploadPath, pathDeposit);
         return resultMap;
     }
@@ -96,149 +96,5 @@ public class FileUploadController {
         }
         return resultMap;
     }
-
-/*    @RequestMapping(value = "/upLoadRequireFile")
-    @ResponseBody
-    public Map<String,Object> uploadRequireFile(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        resultMap.put("status", 400);
-        if(file!=null&&file.length>0){
-            //组合image名称，“;隔开”
-            List<String> fileName =new ArrayList<String>();
-            PrintWriter out = null;
-            try {
-                for (int i = 0; i < file.length; i++) {
-                    if (!file[i].isEmpty()) {
-                        //上传文件，随机名称，";"分号隔开
-                        FileUtil.uploadWordFile(request, "/RequireFile/", file[i], false);
-                    }
-                }
-                //上传成功
-                if(fileName!=null&&fileName.size()>0){
-                    System.out.println("上传成功！");
-                    resultMap.put("status", 200);
-                    resultMap.put("message", "上传成功！");
-                }else {
-                    resultMap.put("status", 500);
-                    resultMap.put("message", "上传失败！文件格式错误！");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                resultMap.put("status", 500);
-                resultMap.put("message", "上传异常！");
-            }
-        }else {
-            resultMap.put("status", 500);
-            resultMap.put("message", "没有检测到有效文件！");
-        }
-        return resultMap;
-    }
-
-    @RequestMapping(value = "/upLoadDesignFile")
-    @ResponseBody
-    public Map<String,Object> upLoadDesignFile(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        resultMap.put("status", 400);
-        if(file!=null&&file.length>0){
-            //组合image名称，“;隔开”
-            List<String> fileName =new ArrayList<String>();
-            PrintWriter out = null;
-            try {
-                for (int i = 0; i < file.length; i++) {
-                    if (!file[i].isEmpty()) {
-                        //上传文件，随机名称，";"分号隔开
-                        FileUtil.uploadWordFile(request, "/DesignFile/", file[i], false);
-                    }
-                }
-                //上传成功
-                if(fileName!=null&&fileName.size()>0){
-                    System.out.println("上传成功！");
-                    resultMap.put("status", 200);
-                    resultMap.put("message", "上传成功！");
-                }else {
-                    resultMap.put("status", 500);
-                    resultMap.put("message", "上传失败！文件格式错误！");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                resultMap.put("status", 500);
-                resultMap.put("message", "上传异常！");
-            }
-        }else {
-            resultMap.put("status", 500);
-            resultMap.put("message", "没有检测到有效文件！");
-        }
-        return resultMap;
-    }
-
-    @RequestMapping(value = "/upLoadCodingFile")
-    @ResponseBody
-    public Map<String,Object> upLoadCodingFile(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        resultMap.put("status", 400);
-        if(file!=null&&file.length>0){
-            //组合image名称，“;隔开”
-            List<String> fileName =new ArrayList<String>();
-            PrintWriter out = null;
-            try {
-                for (int i = 0; i < file.length; i++) {
-                    if (!file[i].isEmpty()) {
-                        //上传文件，随机名称，";"分号隔开
-                        FileUtil.uploadWordFile(request, "/CodingFile/", file[i], false);
-                    }
-                }
-                //上传成功
-                if(fileName!=null&&fileName.size()>0){
-                    System.out.println("上传成功！");
-                    resultMap.put("status", 200);
-                    resultMap.put("message", "上传成功！");
-                }else {
-                    resultMap.put("status", 500);
-                    resultMap.put("message", "上传失败！文件格式错误！");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                resultMap.put("status", 500);
-                resultMap.put("message", "上传异常！");
-            }
-        }else {
-            resultMap.put("status", 500);
-            resultMap.put("message", "没有检测到有效文件！");
-        }
-        return resultMap;
-    }
-
-    @RequestMapping(value = "/upLoadTestFile")
-    @ResponseBody
-    public Map<String,Object> upLoadTestFile(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile[] file) throws Exception{
-        resultMap.put("status", 400);
-        if(file!=null&&file.length>0){
-            //组合image名称，“;隔开”
-            List<String> fileName =new ArrayList<String>();
-            PrintWriter out = null;
-            try {
-                for (int i = 0; i < file.length; i++) {
-                    if (!file[i].isEmpty()) {
-                        //上传文件，随机名称，";"分号隔开
-                        FileUtil.uploadWordFile(request, "/TestFile/", file[i], false);
-                    }
-                }
-                //上传成功
-                if(fileName!=null&&fileName.size()>0){
-                    System.out.println("上传成功！");
-                    resultMap.put("status", 200);
-                    resultMap.put("message", "上传成功！");
-                }else {
-                    resultMap.put("status", 500);
-                    resultMap.put("message", "上传失败！文件格式错误！");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                resultMap.put("status", 500);
-                resultMap.put("message", "上传异常！");
-            }
-        }else {
-            resultMap.put("status", 500);
-            resultMap.put("message", "没有检测到有效文件！");
-        }
-        return resultMap;
-    }*/
 
 }

@@ -12,8 +12,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Intelligent_traffic" target="1.11" />
-      <module name="SpringBootAdminServer" target="1.11" />
+      <module name="Intelligent_traffic" target="11" />
+      <module name="SpringBootAdminServer" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

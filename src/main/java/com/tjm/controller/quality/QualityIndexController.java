@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.sound.midi.Soundbank;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -70,7 +69,7 @@ public class QualityIndexController {
     //计算指标
     @RequestMapping("/calculateIndex")
     @ResponseBody
-    public Map<String, Object> calculateIndex(Indicator indicator, Model model) {
+    public Map<String, Object> calculateIndex(Indicator indicator) {
         System.out.println(indicator);
 
         double v = 0.0;
@@ -80,24 +79,37 @@ public class QualityIndexController {
             indicator.setDenominatorResult(100);
         }
 
-        if (indicator.getCalMode().equals("模式一")) {
-            double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
-            v = (measurementValue) * 100;
-        } else if (indicator.getCalMode().equals("模式二")) {
-            double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
-            v = (1.0 - measurementValue) * 100;
-        } else if (indicator.getCalMode().equals("模式三")) {
-            double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
-            v = (1.0 / measurementValue) * 100;
-        } else if (indicator.getCalMode().equals("模式四")) {
-            double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
-            v = (1.0 - (1.0 / measurementValue)) * 100;
-        } else if (indicator.getCalMode().equals("模式五")) {
-            double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
-            v = (1.0 / (1.0 + measurementValue)) * 100;
-        } else if (indicator.getCalMode().equals("模式六")) {
-            double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
-            v = (1.0 - (1.0 / (1.0 + measurementValue))) * 100;
+        switch (indicator.getCalMode()) {
+            case "模式一": {
+                double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
+                v = (measurementValue) * 100;
+                break;
+            }
+            case "模式二": {
+                double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
+                v = (1.0 - measurementValue) * 100;
+                break;
+            }
+            case "模式三": {
+                double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
+                v = (1.0 / measurementValue) * 100;
+                break;
+            }
+            case "模式四": {
+                double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
+                v = (1.0 - (1.0 / measurementValue)) * 100;
+                break;
+            }
+            case "模式五": {
+                double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
+                v = (1.0 / (1.0 + measurementValue)) * 100;
+                break;
+            }
+            case "模式六": {
+                double measurementValue = indicator.getMolecularResult() / indicator.getDenominatorResult();
+                v = (1.0 - (1.0 / (1.0 + measurementValue))) * 100;
+                break;
+            }
         }
         DecimalFormat df = new DecimalFormat("0.00");
         double parseValue = Double.parseDouble(df.format(v));

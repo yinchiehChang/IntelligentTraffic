@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8">
-        <div th:include="/qualityEvaluation/common-quality :: commonheader"></div>
+        <div th:include="qualityEvaluation/common-quality :: commonheader"></div>
         <title>配置模型</title>
 
     </head>
 
     <body class="col-sm-12">
 
-        <span th:text="${uid}"></span>
+        <span th:text="${uid}" hidden="hidden"></span>
 
         <div class="row">
             <!--<div class="col-sm-3">
@@ -70,8 +70,7 @@
                 </div>
             </div>
         </form>
-
-        <span th:text="${getQualityModel}"></span>
+        
 
 
     </body>
