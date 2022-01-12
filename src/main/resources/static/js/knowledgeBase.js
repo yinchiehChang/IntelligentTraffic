@@ -817,11 +817,12 @@ function genFileList(attachements) {
         for(var i = 0; i < attachements.length; i++){
             var attachement = attachements[i];
             var path = attachement.uri.substring(attachement.uri.search("KBFile"));
+            console.log(path);
             var baseFileName = attachement.uri.substring(attachement.uri.lastIndexOf("\\")+1);
 
             tbody += '<tr>' +
-                         '<td><a href="' + path + '" target="_blank">'+attachement.filename+'</a></td>' +
-                         '<td>'+attachement.type+'</td>' +
+                         '<td><a href="resources\\' + path + '" target="_blank">'+attachement.filename+'</a></td>' +
+                         '<td>' + attachement.type + '</td>' +
                          '<td style="text-align:center">\n' +
                            '<a type="button" class="layui-btn layui-btn-small layui-btn-primary" href="KBDownloadFile?bid=' + base.base_id + '&fileName=' + baseFileName + '">下载</a>\n' +
                            '<button type="button" class="layui-btn layui-btn-small layui-btn-danger" onclick="deleteFile(\'' + attachement.uid + '\')">删除</button>\n' +

@@ -708,7 +708,7 @@ public class KnowledgeBaseController {
                 for (int i = 0; i < file.length; i++) {
                     if (!file[i].isEmpty()) {
                         //上传文件，随机名称，";"分号隔开
-                        Attachement attachement = FileUtil.uploadKBFile(request, "/" + String.valueOf(bid), file[i], false, "/src/main/resources/KBFile/");
+                        Attachement attachement = FileUtil.uploadKBFile(request, "\\" + String.valueOf(bid), file[i], false, "\\src\\main\\resources\\KBFile\\");
                         fileName.add(attachement.getUri());
                         attachementService.insertAttachement(attachement);
                     }
@@ -754,9 +754,9 @@ public class KnowledgeBaseController {
 
     @RequestMapping(value = "/KBDownloadFile", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String KBDownloadFile(HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "bid") int bid,  @RequestParam(value = "fileName") String fileName) {
-        String path = new FileSystemResource("").getFile().getAbsolutePath();
-        String url = path + "/src/main/resources/KBFile/" + String.valueOf(bid) + "/" + fileName;//拼接得到文件完整路径
+    public String KBDownloadFile(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "bid") int bid,  @RequestParam(value = "fileName") String fileName) {
+        String path = "D:\\WORKSPACE\\TrafficSystem\\Intelligent_traffic\\src\\main\\resources";
+        String url = path + "\\KBFile\\" + String.valueOf(bid) + "\\" + fileName;//拼接得到文件完整路径
 
         if (url != null) {
             //设置文件路径
